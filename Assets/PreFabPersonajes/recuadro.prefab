@@ -166,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e1184fc113eed49b32cd5ed9ebf911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 1
   selectionBorder: {fileID: 8455021208522229430}
 --- !u!1 &8436286436830521194
 GameObject:

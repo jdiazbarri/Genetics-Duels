@@ -76,7 +76,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: 21300000, guid: 40fd80d92be09f244a85fb55ee56ef39, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -166,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e1184fc113eed49b32cd5ed9ebf911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 1
   selectionBorder: {fileID: 3021200937208588709}
 --- !u!1 &3021200937208588709
 GameObject:

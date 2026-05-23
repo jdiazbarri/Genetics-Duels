@@ -5,23 +5,17 @@ using UnityEngine;
 public class PlayerMovemt : MonoBehaviour
 {
     [SerializeField]
-    private float tileSize = 1f;
-
-    [SerializeField]
     private GameObject selectionBorder;
-
+    private GridTile currentTile;
     private bool isDragging = false;
     private Vector3 offset;
 
     void OnMouseDown()
     {
-        // Cambiar estado al hacer click
         isDragging = !isDragging;
 
-        // Activar/desactivar borde
         selectionBorder.SetActive(isDragging);
 
-        // Calcular offset solo al empezar a arrastrar
         if (isDragging)
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -31,11 +25,7 @@ public class PlayerMovemt : MonoBehaviour
         }
         else
         {
-            // Ajustar a la cuadrícula al soltar
-            float x = Mathf.Round(transform.position.x / tileSize) * tileSize;
-            float y = Mathf.Round(transform.position.y / tileSize) * tileSize;
-
-            transform.position = new Vector3(x, y, 0);
+            SnapObject();
         }
     }
 
@@ -50,14 +40,68 @@ public class PlayerMovemt : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void SnapObject()
     {
-        if (other.CompareTag("FusionSlot"))
-        {
-            transform.SetParent(other.transform);
+        Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
 
-            // Ajustar posición al centro del slot
-            transform.position = other.transform.position;
+        // PRIMERO comprobar FusionSlot
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+
+            if (hit.CompareTag("FusionSlot"))
+            {
+                ReleaseCurrentTile();
+
+                transform.SetParent(hit.transform);
+                transform.position = hit.transform.position;
+
+                return;
+            }
+        }
+
+        // DESPUÉS comprobar GridTile
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+
+            if (hit.CompareTag("GridTile"))
+            {
+                GridTile tile = hit.GetComponent<GridTile>();
+
+                if (tile != null)
+                {
+                    // Solo zona jugador
+                    if (!tile.playerZone)
+                        return;
+
+                    // Solo una unidad
+                    if (tile.occupied)
+                        return;
+
+                    ReleaseCurrentTile();
+
+                    tile.occupied = true;
+
+                    currentTile = tile;
+
+                    transform.SetParent(null);
+
+                    transform.position = hit.transform.position;
+
+                    return;
+                }
+            }
+        }
+    }
+
+    void ReleaseCurrentTile()
+    {
+        if (currentTile != null)
+        {
+            currentTile.occupied = false;
         }
     }
 }
