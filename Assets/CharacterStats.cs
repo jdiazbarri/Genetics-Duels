@@ -6,13 +6,22 @@ public class CharacterStats : MonoBehaviour
 {
     public string nombre;
 
-    public float vida;
-    public float dFisico;
-    public float dMagico;
+    // VIDA
+    public float vidaMaxima = 100;
 
-    public float defFisica;
-    public float defMagica;
+    public float vida = 100;
 
+    // DAÑO
+    public float dFisico = 10;
+
+    public float dMagico = 10;
+
+    // DEFENSAS
+    public float defFisica = 20;
+
+    public float defMagica = 20;
+
+    // OTROS
     public float velocidadAtaque;
 
     public float roboVida;
