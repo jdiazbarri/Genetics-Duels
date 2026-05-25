@@ -18,7 +18,9 @@ public class GridManager : MonoBehaviour
     private float wallScale = 0.65f;
 
     [SerializeField]
-    private GameObject enemyPrefab;
+    private List<WaveData> levels;
+
+    private int currentLevel = 0;
 
     // Guardamos todos los tiles
     private GameObject[,] gridTiles;
@@ -27,7 +29,7 @@ public class GridManager : MonoBehaviour
     {
         GenerateGrid();
 
-        SpawnEnemy();
+        SpawnLevelEnemies();
     }
 
     private void GenerateGrid()
@@ -101,25 +103,70 @@ public class GridManager : MonoBehaviour
         );
     }
 
-    void SpawnEnemy()
-    {
-        // Casilla enemiga
-        int enemyCol = cols - 2;
-        int enemyRow = rows / 2;
+    //void SpawnEnemy()
+    //{
+    //    // Casilla enemiga
+    //    int enemyCol = cols - 2;
+    //    int enemyRow = rows / 2;
 
-        // Obtener tile real
-        GameObject targetTile = gridTiles[enemyRow, enemyCol];
+    //    // Obtener tile real
+    //    GameObject targetTile = gridTiles[enemyRow, enemyCol];
 
-        // Crear enemigo centrado
-        Instantiate(
-            enemyPrefab,
-            targetTile.transform.position,
-            Quaternion.identity
-        );
-    }
+    //    // Crear enemigo centrado
+    //    Instantiate(
+    //        enemyPrefab,
+    //        targetTile.transform.position,
+    //        Quaternion.identity
+    //    );
+    //}
 
     void Update()
     {
 
+    }
+
+    void SpawnLevelEnemies()
+    {
+        if (currentLevel >= levels.Count)
+        {
+            Debug.Log("NO MÁS NIVELES");
+
+            return;
+        }
+
+        List<GameObject> enemies =
+            levels[currentLevel].enemies;
+
+        int spawnCol =
+            cols - 2;
+
+        int startRow = 1;
+
+        for (int i = 0;
+            i < enemies.Count;
+            i++)
+        {
+            int row =
+                startRow + i;
+
+            if (row >= rows - 1)
+                break;
+
+            GameObject targetTile =
+                gridTiles[row, spawnCol];
+
+            Instantiate(
+                enemies[i],
+                targetTile.transform.position,
+                Quaternion.identity
+            );
+        }
+    }
+
+    public void NextLevel()
+    {
+        currentLevel++;
+
+        SpawnLevelEnemies();
     }
 }

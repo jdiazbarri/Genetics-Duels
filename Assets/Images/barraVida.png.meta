@@ -173,7 +173,7 @@ TextureImporter:
         width: 30
         height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,6 +181,48 @@ TextureImporter:
       bones: []
       spriteID: 52c4bc92a80ff0e46a08c467b5ad42d9
       internalID: -581715218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarraVolumen
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 84
+        width: 30
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b33135e89e031b4e8127ca56a337a0b
+      internalID: -988757939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BarraVolumenBack
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 4
+        width: 30
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01f21041c1a99a844b127b91b8a77221
+      internalID: -515951293
       vertices: []
       indices: 
       edges: []
@@ -199,6 +241,8 @@ TextureImporter:
       BarraVidaEnemigo: 1888441986
       BarraVidaJugador: 1600537519
       BarraVidaVacia: -581715218
+      BarraVolumen: -988757939
+      BarraVolumenBack: -515951293
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

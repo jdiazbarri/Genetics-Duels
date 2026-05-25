@@ -18,22 +18,28 @@ public class CharacterInfoUI : MonoBehaviour
 
     public void ShowInfo(CharacterStats stats)
     {
+        string skillText = "";
+
+        foreach (SkillInfo skill in stats.skills)
+        {
+            skillText += "\n•" + skill.skillName;
+        }
+
         infoText.text =
             "Nombre: " + stats.nombre + "\n" +
-            "Vida: " + stats.vida + "\n" +
-            "D. Físico: " + stats.dFisico + "\n" +
-            "D. Mágico: " + stats.dMagico + "\n" +
-            "Def. Física: " + stats.defFisica + "\n" +
-            "Def. Mágica: " + stats.defMagica + "\n" +
-            "Vel. Ataque: " + stats.velocidadAtaque + "\n" +
-            "Robo Vida: " + stats.roboVida + "\n" +
-            "P. Crítico: " + stats.probCritico + "\n";
+            "•Vida: " + (stats.vida).ToString("0.##") + "/" + stats.vidaMaxima + "\n" +
+            "•D. Físico: " + stats.dFisico + "\n" +
+            "•Vel. Ataque: " + stats.velocidadAtaque + "\n" +
+            "•Crítico: " + (stats.critico * 100).ToString("0.##") + "%" +"\n" +
+            "•Robo Vida: " + (stats.roboVida * 100).ToString("0.##") + "%" + "\n" +
+            "•Defensa: " + stats.defensa + "\n" +
+            "\nHabilidades:" +
+            skillText;
     }
+    
 
     public void HideInfo()
     {
         infoText.text = "";
     }
-
-
 }
