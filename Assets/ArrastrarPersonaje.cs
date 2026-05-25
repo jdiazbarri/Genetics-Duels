@@ -6,22 +6,40 @@ public class PlayerMovemt : MonoBehaviour
 {
     [SerializeField]
     private GameObject selectionBorder;
+
     private GridTile currentTile;
+
     private bool isDragging = false;
+
     private Vector3 offset;
+
+    // NUEVO
+    private bool canMove = true;
 
     void OnMouseDown()
     {
+        // NO PERMITIR MOVER
+        if (!canMove)
+            return;
+
         isDragging = !isDragging;
 
-        selectionBorder.SetActive(isDragging);
+        selectionBorder.SetActive(
+            isDragging
+        );
 
         if (isDragging)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePos =
+                Camera.main.ScreenToWorldPoint(
+                    Input.mousePosition
+                );
+
             mousePos.z = 0;
 
-            offset = transform.position - mousePos;
+            offset =
+                transform.position
+                - mousePos;
         }
         else
         {
@@ -33,16 +51,24 @@ public class PlayerMovemt : MonoBehaviour
     {
         if (isDragging)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePos =
+                Camera.main.ScreenToWorldPoint(
+                    Input.mousePosition
+                );
+
             mousePos.z = 0;
 
-            transform.position = mousePos + offset;
+            transform.position =
+                mousePos + offset;
         }
     }
 
     void SnapObject()
     {
-        Collider2D[] hits = Physics2D.OverlapPointAll(transform.position);
+        Collider2D[] hits =
+            Physics2D.OverlapPointAll(
+                transform.position
+            );
 
         // PRIMERO comprobar FusionSlot
         foreach (Collider2D hit in hits)
@@ -54,8 +80,12 @@ public class PlayerMovemt : MonoBehaviour
             {
                 ReleaseCurrentTile();
 
-                transform.SetParent(hit.transform);
-                transform.position = hit.transform.position;
+                transform.SetParent(
+                    hit.transform
+                );
+
+                transform.position =
+                    hit.transform.position;
 
                 return;
             }
@@ -69,15 +99,16 @@ public class PlayerMovemt : MonoBehaviour
 
             if (hit.CompareTag("GridTile"))
             {
-                GridTile tile = hit.GetComponent<GridTile>();
+                GridTile tile =
+                    hit.GetComponent<GridTile>();
 
                 if (tile != null)
                 {
-                    // Solo zona jugador
+                    // SOLO zona jugador
                     if (!tile.playerZone)
                         return;
 
-                    // Solo una unidad
+                    // SOLO una unidad
                     if (tile.occupied)
                         return;
 
@@ -89,7 +120,8 @@ public class PlayerMovemt : MonoBehaviour
 
                     transform.SetParent(null);
 
-                    transform.position = hit.transform.position;
+                    transform.position =
+                        hit.transform.position;
 
                     return;
                 }
@@ -102,6 +134,22 @@ public class PlayerMovemt : MonoBehaviour
         if (currentTile != null)
         {
             currentTile.occupied = false;
+        }
+    }
+
+    // ACTIVAR / DESACTIVAR MOVIMIENTO
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+
+        // CANCELAR DRAG
+        if (!canMove)
+        {
+            isDragging = false;
+
+            selectionBorder.SetActive(
+                false
+            );
         }
     }
 }
