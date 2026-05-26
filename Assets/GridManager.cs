@@ -22,7 +22,7 @@ public class GridManager : MonoBehaviour
 
     private int currentLevel = 0;
 
-    // Guardamos todos los tiles
+    // TODOS LOS TILES
     private GameObject[,] gridTiles;
 
     void Start()
@@ -34,122 +34,170 @@ public class GridManager : MonoBehaviour
 
     private void GenerateGrid()
     {
-        // Inicializar matriz
-        gridTiles = new GameObject[rows, cols];
+        // MATRIZ
+        gridTiles =
+            new GameObject[rows, cols];
 
-        GameObject iceTile = Resources.Load<GameObject>("ice");
-        GameObject wallTile = Resources.Load<GameObject>("muralla");
+        GameObject iceTile =
+            Resources.Load<GameObject>(
+                "ice"
+            );
 
-        for (int row = 0; row < rows; row++)
+        GameObject wallTile =
+            Resources.Load<GameObject>(
+                "muralla"
+            );
+
+        for (
+            int row = 0;
+            row < rows;
+            row++
+        )
         {
-            for (int col = 0; col < cols; col++)
+            for (
+                int col = 0;
+                col < cols;
+                col++
+            )
             {
                 GameObject prefabToSpawn;
 
-                // Bordes = muralla
-                if (row == 0 || row == rows - 1 || col == 0 || col == cols - 1)
+                // BORDES
+                if (
+                    row == 0
+                    || row == rows - 1
+                    || col == 0
+                    || col == cols - 1
+                )
                 {
-                    prefabToSpawn = wallTile;
+                    prefabToSpawn =
+                        wallTile;
                 }
                 else
                 {
-                    prefabToSpawn = iceTile;
+                    prefabToSpawn =
+                        iceTile;
                 }
 
-                // Crear tile
-                GameObject tile = Instantiate(prefabToSpawn, transform);
+                // CREAR TILE
+                GameObject tile =
+                    Instantiate(
+                        prefabToSpawn,
+                        transform
+                    );
 
-                // Guardar referencia
-                gridTiles[row, col] = tile;
+                gridTiles[row, col] =
+                    tile;
 
-                // Configuración solo para tiles normales
-                if (prefabToSpawn == iceTile)
+                // GRID TILE
+                if (
+                    prefabToSpawn
+                    == iceTile
+                )
                 {
-                    GridTile gridTile = tile.AddComponent<GridTile>();
+                    GridTile gridTile =
+                        tile.AddComponent<GridTile>();
+
                     gridTile.row = row;
+
                     gridTile.col = col;
 
-                    // Zona jugador = primeras 4 columnas
+                    // ZONA JUGADOR
                     if (col < 4)
                     {
-                        gridTile.playerZone = true;
+                        gridTile.playerZone =
+                            true;
                     }
                 }
 
-                // Posición
-                float posX = col * tileSize;
-                float posY = row * tileSize;
+                // POSICIÓN
+                float posX =
+                    col * tileSize;
 
-                tile.transform.position = new Vector2(posX, posY);
+                float posY =
+                    row * tileSize;
 
-                // Escala
-                tile.transform.localScale = Vector3.one * tileSize;
+                tile.transform.position =
+                    new Vector2(
+                        posX,
+                        posY
+                    );
 
-                // Escala especial murallas
-                if (prefabToSpawn == wallTile)
+                // ESCALA NORMAL
+                tile.transform.localScale =
+                    Vector3.one
+                    * tileSize;
+
+                // ESCALA MURALLA
+                if (
+                    prefabToSpawn
+                    == wallTile
+                )
                 {
-                    tile.transform.localScale = Vector3.one * tileSize * wallScale;
+                    tile.transform.localScale =
+                        Vector3.one
+                        * tileSize
+                        * wallScale;
                 }
             }
         }
 
-        // Centrar grid
-        float gridWidth = cols * tileSize;
-        float gridHeight = rows * tileSize;
+        // CENTRAR GRID
+        float gridWidth =
+            cols * tileSize;
 
-        transform.position = new Vector2(
-            -gridWidth / 2 + tileSize / 2,
-            -gridHeight / 2 + tileSize / 2
-        );
-    }
+        float gridHeight =
+            rows * tileSize;
 
-    //void SpawnEnemy()
-    //{
-    //    // Casilla enemiga
-    //    int enemyCol = cols - 2;
-    //    int enemyRow = rows / 2;
+        transform.position =
+            new Vector2(
+                -gridWidth / 2
+                + tileSize / 2,
 
-    //    // Obtener tile real
-    //    GameObject targetTile = gridTiles[enemyRow, enemyCol];
-
-    //    // Crear enemigo centrado
-    //    Instantiate(
-    //        enemyPrefab,
-    //        targetTile.transform.position,
-    //        Quaternion.identity
-    //    );
-    //}
-
-    void Update()
-    {
-
+                -gridHeight / 2
+                + tileSize / 2
+            );
     }
 
     void SpawnLevelEnemies()
     {
-        if (currentLevel >= levels.Count)
+        // FIN JUEGO
+        if (
+            currentLevel
+            >= levels.Count
+        )
         {
-            Debug.Log("NO MÁS NIVELES");
+            Debug.Log(
+                "NO MÁS NIVELES"
+            );
 
             return;
         }
 
         List<GameObject> enemies =
-            levels[currentLevel].enemies;
+            levels[currentLevel]
+            .enemies;
 
+        // COLUMNA DERECHA
         int spawnCol =
             cols - 2;
 
-        int startRow = 1;
+        // FILA SUPERIOR
+        int startRow =
+            rows - 2;
 
-        for (int i = 0;
+        for (
+            int i = 0;
             i < enemies.Count;
-            i++)
+            i++
+        )
         {
+            // ARRIBA ? ABAJO
             int row =
-                startRow + i;
+                startRow - i;
 
-            if (row >= rows - 1)
+            // EVITAR MURO
+            if (row <= 0)
                 break;
 
             GameObject targetTile =
@@ -161,6 +209,11 @@ public class GridManager : MonoBehaviour
                 Quaternion.identity
             );
         }
+
+        Debug.Log(
+            "Nivel actual: "
+            + (currentLevel + 1)
+        );
     }
 
     public void NextLevel()

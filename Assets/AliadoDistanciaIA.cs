@@ -155,4 +155,9 @@ public class AliadoDistanciaIA : MonoBehaviour
     {
         canAct = true;
     }
+
+    public void StopAI()
+    {
+        canAct = false;
+    }
 }

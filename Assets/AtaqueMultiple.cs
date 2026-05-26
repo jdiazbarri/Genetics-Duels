@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AtaqueMultiple : MonoBehaviour
+public class AtaqueMultiple : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -38,13 +38,16 @@ public class AtaqueMultiple : MonoBehaviour
 
         skill.skillName =
             "MultiShot "+
-            " (+" + extraProjectiles + ")" + "-" + tier;
+            " (+" + extraProjectiles + ")" + "-T" + tier;
 
         skill.description =
             "Dispara " +
             extraProjectiles +
             " proyectiles extra";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

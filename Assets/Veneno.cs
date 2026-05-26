@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Veneno : MonoBehaviour
+public class Veneno : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -58,6 +58,9 @@ public class Veneno : MonoBehaviour
             poisonDuration +
             "s";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

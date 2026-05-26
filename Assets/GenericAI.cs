@@ -61,6 +61,11 @@ public class GenericAI : MonoBehaviour
         canAct = true;
     }
 
+    public void StopAI()
+    {
+        canAct = false;
+    }
+
     void FindClosestTarget()
     {
         GameObject[] targets =

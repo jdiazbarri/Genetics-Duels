@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VidaPorDefensa : MonoBehaviour
+public class VidaPorDefensa : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -61,6 +61,9 @@ public class VidaPorDefensa : MonoBehaviour
             ((vidaMultiplier - 1f) * 100f) +
             "% vida";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

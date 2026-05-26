@@ -20,24 +20,38 @@ public class CharacterBoard : MonoBehaviour
 
     void GenerateBoard()
     {
-        float startX = -(cols - 1) * spacing / (-1.55f);
+        float startX =
+            -(cols - 1)
+            * spacing
+            / (-1.55f);
 
-        for (int col = 0; col < cols; col++)
+        for (int col = 0;
+            col < cols;
+            col++)
         {
             if (col >= characterPrefabs.Length)
                 return;
 
-            // Centrado horizontal
-            float posX = startX + col * spacing;
+            float posX =
+                startX + col * spacing;
 
-            // Ajusta la Y donde quieras el tablero
             float posY = 100f;
 
-            Vector3 spawnPos = new Vector3(posX, posY, 0);
+            Vector3 spawnPos =
+                new Vector3(
+                    posX,
+                    posY,
+                    0
+                );
 
-            Instantiate(characterPrefabs[col], spawnPos, Quaternion.identity, transform);
+            GameObject obj =
+    Instantiate(
+        characterPrefabs[col],
+        spawnPos,
+        Quaternion.identity
+    );
+
+            
         }
     }
-
-    
 }

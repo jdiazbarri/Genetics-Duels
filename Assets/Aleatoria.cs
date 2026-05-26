@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aleatoria : MonoBehaviour
+public class Aleatoria : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -206,6 +206,9 @@ public class Aleatoria : MonoBehaviour
         skill.description =
             "Potencia una stat y reduce el resto";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

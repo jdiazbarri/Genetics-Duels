@@ -12,12 +12,11 @@ public class CharacterStats : MonoBehaviour
 
     // BASE
     public float baseDFisico = 0;
+    public float baseDefensa = 0f;
     public float baseVelocidadAtaque = 1;
-
     public float baseCritico = 0f;
     public float baseRoboVida = 0f;
 
-    public float baseDefensa = 0f;
 
     public int numeroProyectiles = 1;
 
@@ -53,6 +52,14 @@ public class CharacterStats : MonoBehaviour
     // HABILIDADES ACTIVAS
     public List<SkillInfo> skills =
         new List<SkillInfo>();
+
+    // Tipo de sangre
+    string[] tipos =
+        {
+        "A","B","C","D",
+        "E","F","G","H",
+        "I","J","K","L"
+        };
 
     void Start()
     {
@@ -201,13 +208,6 @@ public class CharacterStats : MonoBehaviour
 
     void AsignarTipoGenetico()
     {
-        string[] tipos =
-        {
-        "A","B","C","D",
-        "E","F","G","H",
-        "I","J","K","L"
-    };
-
         tipoSangre =
             tipos[
                 Random.Range(0, tipos.Length)
@@ -226,5 +226,22 @@ public class CharacterStats : MonoBehaviour
     private void OnMouseExit()
     {
         CharacterInfoUI.instance.HideInfo();
+    }
+
+    public bool HasSkill(
+    string skillName
+)
+    {
+        foreach (SkillInfo skill
+            in skills)
+        {
+            if (skill.skillName
+                == skillName)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

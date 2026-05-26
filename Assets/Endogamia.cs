@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Endogamia : MonoBehaviour
+public class Endogamia : MonoBehaviour, Habilidad
 {
     private CharacterStats stats;
 
@@ -10,17 +10,27 @@ public class Endogamia : MonoBehaviour
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
 
-        stats.SetVidaMultiplier(multiplicador);
+        stats.SetVidaMultiplier(
+            multiplicador
+        );
 
-        stats.SetDamageMultiplier(multiplicador);
+        stats.SetDamageMultiplier(
+            multiplicador
+        );
 
-        stats.SetDefenseMultiplier(multiplicador);
+        stats.SetDefenseMultiplier(
+            multiplicador
+        );
 
-        stats.SetAttackSpeedMultiplier(multiplicador);
+        stats.SetAttackSpeedMultiplier(
+            multiplicador
+        );
 
-        SkillInfo skill = new SkillInfo();
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
             "Endogamia";

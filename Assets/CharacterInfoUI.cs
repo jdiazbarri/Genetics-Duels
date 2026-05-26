@@ -20,23 +20,86 @@ public class CharacterInfoUI : MonoBehaviour
     {
         string skillText = "";
 
-        foreach (SkillInfo skill in stats.skills)
+        foreach (SkillInfo skill
+            in stats.skills)
         {
-            skillText += "\n•" + skill.skillName;
+            skillText +=
+                "\n• "
+                + skill.skillName;
         }
 
         infoText.text =
-            "Nombre: " + stats.nombre + "\n" +
-            "•Vida: " + (stats.vida).ToString("0.##") + "/" + stats.vidaMaxima + "\n" +
-            "•D. Físico: " + stats.dFisico + "\n" +
-            "•Vel. Ataque: " + stats.velocidadAtaque + "\n" +
-            "•Crítico: " + (stats.critico * 100).ToString("0.##") + "%" +"\n" +
-            "•Robo Vida: " + (stats.roboVida * 100).ToString("0.##") + "%" + "\n" +
-            "•Defensa: " + stats.defensa + "\n" +
-            "\nHabilidades:" +
-            skillText;
+            "Nombre: "
+            + stats.nombre
+            + "\n"
+
+            + "Sangre: "
+            + stats.tipoSangre
+            + "\n"
+
+            + "•Vida: "
+            + FormatStat(stats.vida)
+            + "/"
+            + FormatStat(stats.vidaMaxima)
+            + "\n"
+
+            + "•D. Físico: "
+            + FormatStat(stats.dFisico)
+            + "\n"
+
+            + "•Vel. Ataque: "
+            + FormatStat(stats.velocidadAtaque)
+            + "\n"
+
+            + "•Crítico: "
+            + FormatPercent(stats.critico)
+            + "\n"
+
+            + "•Robo Vida: "
+            + FormatPercent(stats.roboVida)
+            + "\n"
+
+            + "•Defensa: "
+            + FormatStat(stats.defensa)
+            + "\n"
+
+            + "\nHabilidades:"
+            + skillText;
     }
-    
+
+    // FORMATO NUMÉRICO
+    string FormatStat(float value)
+    {
+        // MILLONES En principio no se deberia llegar aquí
+        if (value >= 1000000)
+        {
+            return
+                (value / 1000000f)
+                .ToString("0.#")
+                + "M";
+        }
+
+        // MILES
+        if (value >= 1000)
+        {
+            return
+                (value / 1000f)
+                .ToString("0.#")
+                + "K";
+        }
+
+        // NORMAL
+        return value.ToString("0.##");
+    }
+
+    // FORMATO %
+    string FormatPercent(float value)
+    {
+        return
+            (value * 100f)
+            .ToString("0.##")
+            + "%";
+    }
 
     public void HideInfo()
     {
