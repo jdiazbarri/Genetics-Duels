@@ -11,16 +11,27 @@ public class PlayerMovemt : MonoBehaviour
 
     private bool isDragging = false;
 
+    private bool canMove = true;
+
     private Vector3 offset;
 
-    // NUEVO
-    private bool canMove = true;
+    // POSICIÓN DEL GRID
+    private Vector3 battlePosition;
+
+    private static PlayerMovemt currentDragging;
 
     void OnMouseDown()
     {
-        // NO PERMITIR MOVER
         if (!canMove)
             return;
+
+        if (
+            currentDragging != null
+            && currentDragging != this
+        )
+        {
+            return;
+        }
 
         isDragging = !isDragging;
 
@@ -30,6 +41,8 @@ public class PlayerMovemt : MonoBehaviour
 
         if (isDragging)
         {
+            currentDragging = this;
+
             Vector3 mousePos =
                 Camera.main.ScreenToWorldPoint(
                     Input.mousePosition
@@ -43,6 +56,8 @@ public class PlayerMovemt : MonoBehaviour
         }
         else
         {
+            currentDragging = null;
+
             SnapObject();
         }
     }
@@ -70,12 +85,12 @@ public class PlayerMovemt : MonoBehaviour
                 transform.position
             );
 
-        // PRIMERO comprobar FusionSlot
         foreach (Collider2D hit in hits)
         {
             if (hit.gameObject == gameObject)
                 continue;
 
+            // FUSION SLOT
             if (hit.CompareTag("FusionSlot"))
             {
                 ReleaseCurrentTile();
@@ -89,14 +104,8 @@ public class PlayerMovemt : MonoBehaviour
 
                 return;
             }
-        }
 
-        // DESPUÉS comprobar GridTile
-        foreach (Collider2D hit in hits)
-        {
-            if (hit.gameObject == gameObject)
-                continue;
-
+            // GRID
             if (hit.CompareTag("GridTile"))
             {
                 GridTile tile =
@@ -104,11 +113,9 @@ public class PlayerMovemt : MonoBehaviour
 
                 if (tile != null)
                 {
-                    // SOLO zona jugador
                     if (!tile.playerZone)
                         return;
 
-                    // SOLO una unidad
                     if (tile.occupied)
                         return;
 
@@ -118,6 +125,7 @@ public class PlayerMovemt : MonoBehaviour
 
                     currentTile = tile;
 
+                    // SACAR DEL SLOT
                     transform.SetParent(null);
 
                     transform.position =
@@ -134,15 +142,15 @@ public class PlayerMovemt : MonoBehaviour
         if (currentTile != null)
         {
             currentTile.occupied = false;
+
+            currentTile = null;
         }
     }
 
-    // ACTIVAR / DESACTIVAR MOVIMIENTO
     public void SetCanMove(bool value)
     {
         canMove = value;
 
-        // CANCELAR DRAG
         if (!canMove)
         {
             isDragging = false;
@@ -151,5 +159,19 @@ public class PlayerMovemt : MonoBehaviour
                 false
             );
         }
+    }
+
+    // GUARDAR POSICIÓN ANTES BATALLA
+    public void SaveBattlePosition()
+    {
+        battlePosition =
+            transform.position;
+    }
+
+    // VOLVER AL TILE
+    public void ReturnToStartPosition()
+    {
+        transform.position =
+            battlePosition;
     }
 }

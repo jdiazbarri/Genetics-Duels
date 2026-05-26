@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjetivosMultiples: MonoBehaviour
+public class ObjetivosMultiples: MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -45,6 +45,9 @@ public class ObjetivosMultiples: MonoBehaviour
             extraTargets +
             " enemigos extra";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

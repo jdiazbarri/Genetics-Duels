@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmaduraPorVida : MonoBehaviour
+public class ArmaduraPorVida : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -58,6 +58,9 @@ public class ArmaduraPorVida : MonoBehaviour
             ((defenseMultiplier - 1f) * 100f) +
             "% defensa";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

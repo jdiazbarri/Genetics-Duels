@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DanoPorVelocidad : MonoBehaviour
+public class DanoPorVelocidad : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -79,6 +79,9 @@ public class DanoPorVelocidad : MonoBehaviour
             ((1f - attackSpeedMultiplier) * 100f) +
             "% velocidad ataque";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

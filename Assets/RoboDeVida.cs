@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoboDeVida : MonoBehaviour
+public class RoboDeVida : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -44,6 +44,9 @@ public class RoboDeVida : MonoBehaviour
             (lifeSteal * 100f) +
             "% del daño cura al atacante";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }

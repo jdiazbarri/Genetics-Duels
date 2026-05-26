@@ -130,8 +130,6 @@ public class ArrowProjectile : MonoBehaviour
         if (criticalHit)
         {
             baseDamage *= 2f;
-
-            Debug.Log("CRÍTICO");
         }
 
         // DEFENSA

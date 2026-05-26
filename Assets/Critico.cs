@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Critico : MonoBehaviour
+public class Critico : MonoBehaviour, Habilidad
 {
     [SerializeField]
     private int tier = 1;
@@ -52,6 +52,9 @@ public class Critico : MonoBehaviour
             (critChance * 100f) +
             "% probabilidad crítico";
 
-        stats.skills.Add(skill);
+        if (!stats.HasSkill(skill.skillName))
+        {
+            stats.skills.Add(skill);
+        }
     }
 }
