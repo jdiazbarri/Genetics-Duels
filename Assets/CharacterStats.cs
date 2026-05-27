@@ -162,7 +162,7 @@ public class CharacterStats : MonoBehaviour
         UpdateStats();
     }
 
-    public void SetVidaMultiplier(float value)
+    public void SetHealthMultiplier(float value)
     {
         vidaMaxima *= value;
 
@@ -243,5 +243,25 @@ public class CharacterStats : MonoBehaviour
         }
 
         return false;
+    }
+
+    public int GenerateTier()
+    {
+        float roll = Random.value;
+
+        // 92%
+        if (roll <= 0.92f)
+        {
+            return 1;
+        }
+
+        // 7%
+        if (roll <= 0.99f)
+        {
+            return 2;
+        }
+
+        // 1%
+        return 3;
     }
 }

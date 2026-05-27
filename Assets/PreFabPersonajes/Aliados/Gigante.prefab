@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 5086156801384447539}
   - component: {fileID: 1830981078341451151}
   - component: {fileID: 7873893441917883254}
+  - component: {fileID: -9027315219605324188}
   m_Layer: 0
   m_Name: Gigante
   m_TagString: Player
@@ -422,8 +423,8 @@ MonoBehaviour:
   vidaMaxima: 700
   vida: 700
   baseDFisico: 60
-  baseVelocidadAtaque: 0.65
   baseDefensa: 45
+  baseVelocidadAtaque: 0.65
   baseCritico: 0
   baseRoboVida: 0
   numeroProyectiles: 1
@@ -463,7 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f747a7970367bf743a71777cfa121816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
 --- !u!50 &7873893441917883254
 Rigidbody2D:
   serializedVersion: 4
@@ -491,6 +491,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-9027315219605324188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5725679713005758523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &6217890342696778728
 GameObject:
   m_ObjectHideFlags: 0

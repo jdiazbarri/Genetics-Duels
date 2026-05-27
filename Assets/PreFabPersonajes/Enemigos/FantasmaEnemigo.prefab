@@ -233,8 +233,8 @@ MonoBehaviour:
   vidaMaxima: 500
   vida: 500
   baseDFisico: 65
-  baseVelocidadAtaque: 1.5
   baseDefensa: 15
+  baseVelocidadAtaque: 1.5
   baseCritico: 0
   baseRoboVida: 0
   numeroProyectiles: 1
@@ -259,7 +259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 024ceeadb5bb4244587687d3a3b59448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
 --- !u!1 &1625679419161346825
 GameObject:
   m_ObjectHideFlags: 0

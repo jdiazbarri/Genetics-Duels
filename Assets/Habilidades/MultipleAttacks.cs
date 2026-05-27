@@ -2,50 +2,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AtaqueMultiple : MonoBehaviour, Habilidad
+public class MultipleAttacks : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         int extraProjectiles = 0;
 
         switch (tier)
         {
             case 1:
+
                 extraProjectiles = 2;
+
                 break;
 
             case 2:
+
                 extraProjectiles = 3;
+
                 break;
 
             case 3:
+
                 extraProjectiles = 4;
+
                 break;
         }
 
+        // APLICAR PROYECTILES
         stats.AddProjectiles(
             extraProjectiles
         );
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "MultiShot "+
-            " (+" + extraProjectiles + ")" + "-T" + tier;
+
+            "MultiShot (+" +
+
+            extraProjectiles +
+
+            ") - T" +
+
+            tier;
 
         skill.description =
-            "Dispara " +
-            extraProjectiles +
-            " proyectiles extra";
 
-        if (!stats.HasSkill(skill.skillName))
+            "Shoots " +
+
+            extraProjectiles +
+
+            " extra projectiles";
+
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }

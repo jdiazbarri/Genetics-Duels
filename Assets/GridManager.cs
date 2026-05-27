@@ -17,10 +17,17 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private float wallScale = 0.65f;
 
+    // ENEMIGOS DEL NIVEL
     [SerializeField]
-    private List<WaveData> levels;
+    private GameObject[] enemyPrefabs;
 
-    private int currentLevel = 0;
+    // ESCALADOR
+    [SerializeField]
+    private CharacterScaler characterScaler;
+
+    // BATTLE MANAGER
+    [SerializeField]
+    private BattleManager battleManager;
 
     // TODOS LOS TILES
     private GameObject[,] gridTiles;
@@ -29,7 +36,7 @@ public class GridManager : MonoBehaviour
     {
         GenerateGrid();
 
-        SpawnLevelEnemies();
+        SpawnEnemies();
     }
 
     private void GenerateGrid()
@@ -45,7 +52,7 @@ public class GridManager : MonoBehaviour
 
         GameObject wallTile =
             Resources.Load<GameObject>(
-                "muralla"
+                "Muro"
             );
 
         for (
@@ -159,25 +166,8 @@ public class GridManager : MonoBehaviour
             );
     }
 
-    void SpawnLevelEnemies()
+    void SpawnEnemies()
     {
-        // FIN JUEGO
-        if (
-            currentLevel
-            >= levels.Count
-        )
-        {
-            Debug.Log(
-                "NO MÁS NIVELES"
-            );
-
-            return;
-        }
-
-        List<GameObject> enemies =
-            levels[currentLevel]
-            .enemies;
-
         // COLUMNA DERECHA
         int spawnCol =
             cols - 2;
@@ -188,7 +178,7 @@ public class GridManager : MonoBehaviour
 
         for (
             int i = 0;
-            i < enemies.Count;
+            i < enemyPrefabs.Length;
             i++
         )
         {
@@ -198,28 +188,31 @@ public class GridManager : MonoBehaviour
 
             // EVITAR MURO
             if (row <= 0)
+            {
                 break;
+            }
 
             GameObject targetTile =
                 gridTiles[row, spawnCol];
 
-            Instantiate(
-                enemies[i],
-                targetTile.transform.position,
-                Quaternion.identity
+            // CREAR ENEMIGO
+            GameObject enemy =
+                Instantiate(
+                    enemyPrefabs[i],
+                    targetTile.transform.position,
+                    Quaternion.identity
+                );
+
+            // ESCALAR ENEMIGO
+            characterScaler.ScaleCharacter(
+                enemy,
+                battleManager.GetCurrentLevel(),
+                "Enemy"
             );
         }
 
         Debug.Log(
-            "Nivel actual: "
-            + (currentLevel + 1)
+            "ENEMIGOS SPAWNEADOS"
         );
-    }
-
-    public void NextLevel()
-    {
-        currentLevel++;
-
-        SpawnLevelEnemies();
     }
 }

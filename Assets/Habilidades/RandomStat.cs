@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Aleatoria : MonoBehaviour, Habilidad
+public class RandomStat : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         int randomStat =
             Random.Range(0, 6);
@@ -19,6 +23,7 @@ public class Aleatoria : MonoBehaviour, Habilidad
         string boostedStat = "";
 
         float reduceMultiplier = 1f;
+
         float boostMultiplier = 1f;
 
         // TIERS
@@ -68,29 +73,34 @@ public class Aleatoria : MonoBehaviour, Habilidad
             reduceMultiplier
         );
 
-        stats.SetVidaMultiplier(
+        stats.SetHealthMultiplier(
             reduceMultiplier
         );
 
-        stats.AddCritChance(-0.05f);
+        stats.AddCritChance(
+            -0.05f
+        );
 
-        stats.AddLifeSteal(-0.05f);
+        stats.AddLifeSteal(
+            -0.05f
+        );
 
         // ELEGIR SOLO 1 STAT
         switch (randomStat)
         {
-            // DAÑO
+            // DAMAGE
             case 0:
 
                 stats.SetDamageMultiplier(
                     boostMultiplier
                 );
 
-                boostedStat = "Daño";
+                boostedStat =
+                    "Damage";
 
                 break;
 
-            // VELOCIDAD
+            // ATTACK SPEED
             case 1:
 
                 stats.SetAttackSpeedMultiplier(
@@ -98,33 +108,35 @@ public class Aleatoria : MonoBehaviour, Habilidad
                 );
 
                 boostedStat =
-                    "Velocidad Ataque";
+                    "Attack Speed";
 
                 break;
 
-            // DEFENSA
+            // DEFENSE
             case 2:
 
                 stats.SetDefenseMultiplier(
                     boostMultiplier
                 );
 
-                boostedStat = "Defensa";
+                boostedStat =
+                    "Defense";
 
                 break;
 
-            // VIDA
+            // HEALTH
             case 3:
 
-                stats.SetVidaMultiplier(
+                stats.SetHealthMultiplier(
                     boostMultiplier
                 );
 
-                boostedStat = "Vida";
+                boostedStat =
+                    "Health";
 
                 break;
 
-            // CRÍTICO
+            // CRITICAL
             case 4:
 
                 switch (tier)
@@ -154,11 +166,12 @@ public class Aleatoria : MonoBehaviour, Habilidad
                         break;
                 }
 
-                boostedStat = "Crítico";
+                boostedStat =
+                    "Critical";
 
                 break;
 
-            // ROBO VIDA
+            // LIFE STEAL
             case 5:
 
                 switch (tier)
@@ -189,24 +202,35 @@ public class Aleatoria : MonoBehaviour, Habilidad
                 }
 
                 boostedStat =
-                    "Robo Vida";
+                    "Life Steal";
 
                 break;
         }
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "Mutación "+
-            " (" +
+
+            "Mutation (" +
+
             boostedStat +
-            ")" + "-" +"T" +
+
+            ") - T" +
+
             tier;
 
         skill.description =
-            "Potencia una stat y reduce el resto";
 
-        if (!stats.HasSkill(skill.skillName))
+            "Boosts one stat and reduces the others";
+
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }

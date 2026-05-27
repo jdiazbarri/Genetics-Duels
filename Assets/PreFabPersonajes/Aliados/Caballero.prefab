@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 3405782333675084401}
   - component: {fileID: 5883011354342396132}
   - component: {fileID: 8142042041229051621}
+  - component: {fileID: 2342316224994503775}
   m_Layer: 0
   m_Name: Caballero
   m_TagString: Player
@@ -332,8 +333,8 @@ MonoBehaviour:
   vidaMaxima: 700
   vida: 700
   baseDFisico: 45
-  baseVelocidadAtaque: 0.6
   baseDefensa: 40
+  baseVelocidadAtaque: 0.6
   baseCritico: 0
   baseRoboVida: 0
   numeroProyectiles: 1
@@ -373,7 +374,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c51a77273d806ed41af7347c3d8573ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
+--- !u!114 &2342316224994503775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062949020876024749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &7472058639464662666
 GameObject:
   m_ObjectHideFlags: 0

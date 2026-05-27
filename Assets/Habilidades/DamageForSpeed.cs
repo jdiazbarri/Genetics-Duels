@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DanoPorVelocidad : MonoBehaviour, Habilidad
+public class DamageForSpeed : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         float damageMultiplier = 1f;
+
         float attackSpeedMultiplier = 1f;
 
         switch (tier)
@@ -57,6 +62,7 @@ public class DanoPorVelocidad : MonoBehaviour, Habilidad
                 break;
         }
 
+        // APLICAR MULTIPLICADORES
         stats.SetDamageMultiplier(
             damageMultiplier
         );
@@ -65,21 +71,40 @@ public class DanoPorVelocidad : MonoBehaviour, Habilidad
             attackSpeedMultiplier
         );
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "DañoPorVelocidad (" +
-            "+" + ((damageMultiplier - 1f) * 100f) + "% Daño, " +
-            "-" + ((1f - attackSpeedMultiplier) * 100f) + "% Velocidad)" + "-" + "T" + tier;
+            "DamageForSpeed (" +
 
-        skill.description =
             "+" +
             ((damageMultiplier - 1f) * 100f) +
-            "% daño, -" +
-            ((1f - attackSpeedMultiplier) * 100f) +
-            "% velocidad ataque";
+            "% Damage, " +
 
-        if (!stats.HasSkill(skill.skillName))
+            "-" +
+            ((1f - attackSpeedMultiplier) * 100f) +
+            "% Speed) - T" +
+
+            tier;
+
+        skill.description =
+
+            "+" +
+            ((damageMultiplier - 1f) * 100f) +
+
+            "% damage, -" +
+
+            ((1f - attackSpeedMultiplier) * 100f) +
+
+            "% attack speed";
+
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }

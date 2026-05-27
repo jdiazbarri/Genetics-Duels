@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Critico : MonoBehaviour, Habilidad
+public class Critical : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         float critChance = 0f;
 
@@ -36,23 +40,32 @@ public class Critico : MonoBehaviour, Habilidad
                 break;
         }
 
+        // APLICAR BONUS
         stats.AddCritChance(
             critChance
         );
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "Crítico (" +
+            "Critical (" +
             (critChance * 100f) +
-            "%)" + "-" + "T" + tier;
+            "%) - T" +
+            tier;
 
         skill.description =
             "+" +
             (critChance * 100f) +
-            "% probabilidad crítico";
+            "% critical chance";
 
-        if (!stats.HasSkill(skill.skillName))
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }

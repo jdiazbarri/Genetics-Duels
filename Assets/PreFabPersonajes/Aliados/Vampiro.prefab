@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 7524883969308731349}
   - component: {fileID: 671603504598767590}
   - component: {fileID: 5187910125901298912}
+  - component: {fileID: 8255935541368522263}
   m_Layer: 0
   m_Name: Vampiro
   m_TagString: Player
@@ -364,8 +365,8 @@ MonoBehaviour:
   vidaMaxima: 450
   vida: 450
   baseDFisico: 30
-  baseVelocidadAtaque: 1.8
   baseDefensa: 15
+  baseVelocidadAtaque: 1.8
   baseCritico: 0
   baseRoboVida: 0
   numeroProyectiles: 1
@@ -407,7 +408,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69db4afe4629e9d438f1979d6be499df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
+--- !u!114 &8255935541368522263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483383727755818003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &5560336989430094892
 GameObject:
   m_ObjectHideFlags: 0

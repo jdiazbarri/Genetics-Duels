@@ -2,31 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Endogamia : MonoBehaviour, Habilidad
+public class Inbreeding : MonoBehaviour, Skills
 {
     private CharacterStats stats;
 
-    private float multiplicador = 1.5f;
+    private float multiplier = 1.5f;
 
     void Start()
     {
         stats =
             GetComponent<CharacterStats>();
 
-        stats.SetVidaMultiplier(
-            multiplicador
+        stats.SetHealthMultiplier(
+            multiplier
         );
 
         stats.SetDamageMultiplier(
-            multiplicador
+            multiplier
         );
 
         stats.SetDefenseMultiplier(
-            multiplicador
+            multiplier
         );
 
         stats.SetAttackSpeedMultiplier(
-            multiplicador
+            multiplier
         );
 
         SkillInfo skill =

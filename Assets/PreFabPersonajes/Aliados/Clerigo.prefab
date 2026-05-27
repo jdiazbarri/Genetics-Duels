@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 8323751611115089058}
   - component: {fileID: 4853918145891359552}
   - component: {fileID: 426766428195105786}
+  - component: {fileID: -8889374117103322174}
   m_Layer: 0
   m_Name: Clerigo
   m_TagString: Player
@@ -409,7 +410,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04783f6454e237644aec267fcefe3f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
+--- !u!114 &-8889374117103322174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4050895787767841034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &4284397260732911650
 GameObject:
   m_ObjectHideFlags: 0

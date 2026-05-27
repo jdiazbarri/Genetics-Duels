@@ -2,50 +2,77 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjetivosMultiples: MonoBehaviour, Habilidad
+public class MultipleObjectives : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         int extraTargets = 1;
 
         switch (tier)
         {
             case 1:
+
                 extraTargets = 1;
+
                 break;
 
             case 2:
+
                 extraTargets = 2;
+
                 break;
 
             case 3:
+
                 extraTargets = 3;
+
                 break;
         }
 
+        // APLICAR OBJETIVOS EXTRA
         stats.AddTargets(
             extraTargets
         );
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "MultiTarget " +
-            " (+" + extraTargets + ")" + "-" + tier;
+
+            "MultiTarget (+" +
+
+            extraTargets +
+
+            ") - T" +
+
+            tier;
 
         skill.description =
-            "Ataca " +
-            extraTargets +
-            " enemigos extra";
 
-        if (!stats.HasSkill(skill.skillName))
+            "Attacks " +
+
+            extraTargets +
+
+            " extra enemies";
+
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }
