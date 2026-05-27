@@ -251,6 +251,7 @@ GameObject:
   - component: {fileID: 118257384442483679}
   - component: {fileID: 6525255953380635321}
   - component: {fileID: 96338545135002811}
+  - component: {fileID: 4405234149535833324}
   m_Layer: 0
   m_Name: Esqueleto
   m_TagString: Player
@@ -449,8 +450,8 @@ MonoBehaviour:
   vidaMaxima: 650
   vida: 650
   baseDFisico: 35
-  baseVelocidadAtaque: 0.75
   baseDefensa: 35
+  baseVelocidadAtaque: 0.75
   baseCritico: 0
   baseRoboVida: 0
   numeroProyectiles: 1
@@ -475,7 +476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4de96b4a15df08f4d92c5f0324445dcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
 --- !u!114 &96338545135002811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +491,19 @@ MonoBehaviour:
   moveDelay: 1
   tileSize: 100
   targetTag: Enemigo
+--- !u!114 &4405234149535833324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8242547374456213049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &9168098357589591336
 GameObject:
   m_ObjectHideFlags: 0

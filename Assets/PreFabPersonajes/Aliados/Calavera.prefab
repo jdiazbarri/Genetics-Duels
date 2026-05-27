@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 838966122063516972}
   - component: {fileID: 3201541943406708502}
   - component: {fileID: 3409346671115174332}
+  - component: {fileID: 6383721068924217844}
   m_Layer: 0
   m_Name: Calavera
   m_TagString: Player
@@ -365,7 +366,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fa17001c88864742b18cab267fb0142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
+--- !u!114 &6383721068924217844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2849615148172748141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &3975097312676067724
 GameObject:
   m_ObjectHideFlags: 0

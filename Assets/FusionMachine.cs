@@ -29,6 +29,16 @@ public class FusionMachine : MonoBehaviour
         {
             fusionDone = true;
 
+            // GASTAR MONEDA
+            if (!BattleManager.instance.UseCoin(1))
+            {
+                fusionDone = false;
+
+                Debug.Log("NO HAY MONEDAS");
+
+                return;
+            }
+
             GameObject parentA =
                 slotA.GetChild(0).gameObject;
 
@@ -148,7 +158,7 @@ public class FusionMachine : MonoBehaviour
             foreach (MonoBehaviour comp
                 in componentsA)
             {
-                if (comp is Habilidad)
+                if (comp is Skills)
                 {
                     System.Type type =
                         comp.GetType();
@@ -168,7 +178,7 @@ public class FusionMachine : MonoBehaviour
             foreach (MonoBehaviour comp
                 in componentsB)
             {
-                if (comp is Habilidad)
+                if (comp is Skills)
                 {
                     System.Type type =
                         comp.GetType();
@@ -198,67 +208,8 @@ public class FusionMachine : MonoBehaviour
                 == statsB.tipoSangre
             )
             {
-                child.AddComponent<Endogamia>();
+                child.AddComponent<Inbreeding>();
             }
-
-            // TEST
-            Debug.Log(
-                "========== FUSIÓN =========="
-            );
-
-            Debug.Log(
-                "PADRE A: "
-                + statsA.nombre
-                + " | Sangre: "
-                + statsA.tipoSangre
-            );
-
-            Debug.Log(
-                "PADRE B: "
-                + statsB.nombre
-                + " | Sangre: "
-                + statsB.tipoSangre
-            );
-
-            Debug.Log(
-                "HIJO: "
-                + childStats.nombre
-            );
-
-            Debug.Log(
-                "Sangre heredada: "
-                + childStats.tipoSangre
-            );
-
-            Debug.Log(
-                "Vida: "
-                + childStats.vidaMaxima
-            );
-
-            Debug.Log(
-                "Daño: "
-                + childStats.dFisico
-            );
-
-            Debug.Log(
-                "Velocidad Ataque: "
-                + childStats.velocidadAtaque
-            );
-
-            Debug.Log(
-                "Defensa: "
-                + childStats.defensa
-            );
-
-            Debug.Log(
-                "Crítico: "
-                + childStats.critico
-            );
-
-            Debug.Log(
-                "Robo Vida: "
-                + childStats.roboVida
-            );
 
             // DESTRUIR PADRES
             Destroy(parentA);
@@ -277,24 +228,24 @@ public class FusionMachine : MonoBehaviour
     }
 
     float GenerateGene(
-        float valueA,
-        float valueB
+        float statA,
+        float statB
     )
     {
         float min =
-            Mathf.Min(valueA, valueB);
+            Mathf.Min(statA, statB);
 
         float max =
-            Mathf.Max(valueA, valueB);
+            Mathf.Max(statA, statB);
 
         float mid =
             (min + max) / 2f;
 
-        float roll =
+        float rng =
             Random.Range(0f, 100f);
 
-        // 15% SUPERIOR
-        if (roll <= 15f)
+        // 15% SUPERIOR AL MAX
+        if (rng <= 15f)
         {
             return Random.Range(
                 max,
@@ -302,8 +253,8 @@ public class FusionMachine : MonoBehaviour
             );
         }
 
-        // 5% INFERIOR
-        if (roll <= 20f)
+        // 5% INFERIOR AL MIN
+        if (rng <= 20f)
         {
             return Random.Range(
                 min * 0.8f,
@@ -311,8 +262,8 @@ public class FusionMachine : MonoBehaviour
             );
         }
 
-        // 50% ENTRE MID Y MAX
-        if (roll <= 70f)
+        // 50% ENTRE MEDIA Y MAX
+        if (rng <= 70f)
         {
             return Random.Range(
                 mid,
@@ -320,7 +271,7 @@ public class FusionMachine : MonoBehaviour
             );
         }
 
-        // 30% ENTRE MIN Y MID
+        // 30% ENTRE MIN Y MEDIA
         return Random.Range(
             min,
             mid

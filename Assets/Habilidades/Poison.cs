@@ -2,34 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Veneno : MonoBehaviour, Habilidad
+public class Poison : MonoBehaviour, Skills
 {
-    [SerializeField]
-    private int tier = 1;
+    private int tier;
 
     private CharacterStats stats;
 
     void Start()
     {
-        stats = GetComponent<CharacterStats>();
+        stats =
+            GetComponent<CharacterStats>();
+
+        // TIER ALEATORIO
+        tier =
+            stats.GenerateTier();
 
         float poisonPercent = 0f;
+
         float poisonDuration = 0f;
 
         switch (tier)
         {
             case 1:
 
-                // 3% durante 3s
+                // 3% durante 2s
                 poisonPercent = 0.03f;
+
                 poisonDuration = 2f;
 
                 break;
 
             case 2:
 
-                // 5% durante 4s
+                // 5% durante 3s
                 poisonPercent = 0.05f;
+
                 poisonDuration = 3f;
 
                 break;
@@ -38,27 +45,44 @@ public class Veneno : MonoBehaviour, Habilidad
 
                 // 8% durante 5s
                 poisonPercent = 0.08f;
+
                 poisonDuration = 5f;
 
                 break;
-
         }
 
-        SkillInfo skill = new SkillInfo();
+        // INFO SKILL
+        SkillInfo skill =
+            new SkillInfo();
 
         skill.skillName =
-            "Veneno (" +
+
+            "Poison (" +
+
             (poisonPercent * 100f) +
-            "%)";
+
+            "%) - T" +
+
+            tier;
 
         skill.description =
-            "Aplica " +
+
+            "Applies " +
+
             (poisonPercent * 100f) +
-            "% del daño durante " +
+
+            "% damage over " +
+
             poisonDuration +
+
             "s";
 
-        if (!stats.HasSkill(skill.skillName))
+        // EVITAR DUPLICADOS
+        if (
+            !stats.HasSkill(
+                skill.skillName
+            )
+        )
         {
             stats.skills.Add(skill);
         }

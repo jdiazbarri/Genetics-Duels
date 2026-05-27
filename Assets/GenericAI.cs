@@ -261,8 +261,8 @@ public class GenericAI : MonoBehaviour
             }
 
             // VENENO
-            Veneno poison =
-                GetComponent<Veneno>();
+            Poison poison =
+                GetComponent<Poison>();
 
             if (poison != null)
             {

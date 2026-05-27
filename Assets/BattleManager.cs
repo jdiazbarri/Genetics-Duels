@@ -7,10 +7,22 @@ using UnityEngine.UI;
 public class BattleManager : MonoBehaviour
 {
     [SerializeField]
-    private int vidas = 3;
+    private int vidas = 1;
 
     [SerializeField]
     private TextMeshProUGUI vidasText;
+
+    [SerializeField]
+    private int monedas = 0;
+
+    [SerializeField]
+    private int maxMonedas = 4;
+
+    [SerializeField]
+    private TextMeshProUGUI monedasText;
+
+    [SerializeField]
+    private int maxSlots = 1;
 
     [SerializeField]
     private List<GameObject> levels;
@@ -24,15 +36,22 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private Button battleButton;
 
+    [SerializeField]
+    private CharacterBoard characterBoard;
+
     private int currentLevel = 0;
 
     private bool battleStarted = false;
 
     private bool battleEnded = false;
 
+    public static BattleManager instance;
+
     void Start()
     {
         UpdateLivesUI();
+
+        UpdateCoinsUI();
 
         // DESACTIVAR TODOS
         for (int i = 0;
@@ -43,7 +62,8 @@ public class BattleManager : MonoBehaviour
         }
 
         // ACTIVAR PRIMER NIVEL
-        levels[currentLevel].SetActive(true);
+        levels[currentLevel]
+            .SetActive(true);
     }
 
     void Update()
@@ -53,7 +73,7 @@ public class BattleManager : MonoBehaviour
         bool hasPlayers =
             battleZone.HasPlayers();
 
-        // ACTIVAR/DESACTIVAR BOTÓN
+        // ACTIVAR BOTÓN
         battleButton.interactable =
             hasPlayers;
 
@@ -61,11 +81,9 @@ public class BattleManager : MonoBehaviour
         ColorBlock colors =
             battleButton.colors;
 
-        // COLOR NORMAL
         colors.normalColor =
             Color.white;
 
-        // COLOR BLOQUEADO
         colors.disabledColor =
             Color.red;
 
@@ -73,39 +91,67 @@ public class BattleManager : MonoBehaviour
             colors;
     }
 
-    // INICIAR PELEA
+    void Awake()
+    {
+        instance = this;
+    }
+
     public void StartBattle()
     {
         if (battleStarted)
             return;
 
         battleStarted = true;
-
         battleEnded = false;
 
-        // ALIADOS
-        GameObject[] players =
-            GameObject.FindGameObjectsWithTag(
-                "Player"
-            );
-
-        foreach (GameObject player
-            in players)
+        // =========================
+        // ?? LIMPIAR CARTAS
+        // =========================
+        if (characterBoard != null)
         {
+            characterBoard.ClearCards();
+            characterBoard.CleanOutsideBattleZone(); // ?? NUEVO
+        }
+
+        // ?? AJUSTAR SLOTS SEGÚN NIVEL
+        UpdateSlots();
+
+        // ?? VALIDAR EQUIPO FINAL
+        ValidatePlayerSlots();
+
+        // =========================
+        // ?? SOLO PLAYER EN GRID
+        // =========================
+        GameObject[] players =
+            GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject player in players)
+        {
+            PlayerTag tag =
+                player.GetComponent<PlayerTag>();
+
+            // ? IGNORAR FUERA DEL GRID
+            if (tag != null && !tag.isInsideBattleZone)
+            {
+                Destroy(player);
+                continue;
+            }
+
+            // =========================
             // MOVIMIENTO
+            // =========================
             PlayerMovemt movement =
                 player.GetComponent<PlayerMovemt>();
 
             if (movement != null)
             {
-                // GUARDAR POSICIÓN GRID
                 movement.SaveBattlePosition();
-
-                // BLOQUEAR MOVIMIENTO
                 movement.SetCanMove(false);
             }
 
-            // IA MELEE
+            // =========================
+            // IA
+            // =========================
             GenericAI ai =
                 player.GetComponent<GenericAI>();
 
@@ -114,26 +160,23 @@ public class BattleManager : MonoBehaviour
                 ai.ActivateAI();
             }
 
-            // IA DISTANCIA
-            AliadoDistanciaIA archer =
+            AliadoDistanciaIA ranged =
                 player.GetComponent<AliadoDistanciaIA>();
 
-            if (archer != null)
+            if (ranged != null)
             {
-                archer.ActivateAI();
+                ranged.ActivateAI();
             }
         }
 
-        // ENEMIGOS
+        // =========================
+        // ENEMIGOS (SIN CAMBIOS)
+        // =========================
         GameObject[] enemies =
-            GameObject.FindGameObjectsWithTag(
-                "Enemigo"
-            );
+            GameObject.FindGameObjectsWithTag("Enemigo");
 
-        foreach (GameObject enemy
-            in enemies)
+        foreach (GameObject enemy in enemies)
         {
-            // IA MELEE
             GenericAI ai =
                 enemy.GetComponent<GenericAI>();
 
@@ -142,13 +185,12 @@ public class BattleManager : MonoBehaviour
                 ai.ActivateAI();
             }
 
-            // IA DISTANCIA
-            AliadoDistanciaIA archer =
+            AliadoDistanciaIA ranged =
                 enemy.GetComponent<AliadoDistanciaIA>();
 
-            if (archer != null)
+            if (ranged != null)
             {
-                archer.ActivateAI();
+                ranged.ActivateAI();
             }
         }
     }
@@ -227,6 +269,21 @@ public class BattleManager : MonoBehaviour
 
             Debug.Log("VICTORIA");
 
+            if (monedas < maxMonedas)
+            {
+                monedas++;
+
+                UpdateCoinsUI();
+            }
+
+            // =========================
+            //  NUEVAS CARTAS PARA SIGUIENTE RONDA
+            // =========================
+            if (characterBoard != null)
+            {
+                characterBoard.GenerateNewCards();
+            }
+
             // RESETEAR ALIADOS
             GameObject[] players =
                 GameObject.FindGameObjectsWithTag(
@@ -263,6 +320,16 @@ public class BattleManager : MonoBehaviour
                     movement.ReturnToStartPosition();
 
                     movement.SetCanMove(true);
+                }
+
+                // CURAR VIDA
+                CharacterStats stats =
+                    player.GetComponent<CharacterStats>();
+
+                if (stats != null)
+                {
+                    stats.vida =
+                        stats.vidaMaxima;
                 }
             }
 
@@ -317,6 +384,12 @@ public class BattleManager : MonoBehaviour
             vidas.ToString();
     }
 
+    void UpdateCoinsUI()
+    {
+        monedasText.text =
+            monedas.ToString();
+    }
+
     void GameOver()
     {
         Debug.Log("GAME OVER");
@@ -325,5 +398,53 @@ public class BattleManager : MonoBehaviour
     public int GetLives()
     {
         return vidas;
+    }
+
+    public bool UseCoin(int amount)
+    {
+        // NO HAY SUFICIENTES
+        if (monedas < amount)
+        {
+            return false;
+        }
+
+        monedas -= amount;
+
+        UpdateCoinsUI();
+
+        return true;
+    }
+
+    public int GetCurrentLevel()
+    {
+        return currentLevel;
+    }
+
+    private void UpdateSlots()
+    {
+        // escala hasta 5 máximo
+        maxSlots = Mathf.Clamp(currentLevel + 1, 1, 5);
+    }
+
+    private void ValidatePlayerSlots()
+    {
+        GameObject[] players =
+            GameObject.FindGameObjectsWithTag("Player");
+
+        List<GameObject> validPlayers = new List<GameObject>(players);
+
+        // si hay más de los permitidos
+        while (validPlayers.Count > maxSlots)
+        {
+            int randomIndex =
+                Random.Range(0, validPlayers.Count);
+
+            GameObject toRemove =
+                validPlayers[randomIndex];
+
+            validPlayers.RemoveAt(randomIndex);
+
+            Destroy(toRemove);
+        }
     }
 }

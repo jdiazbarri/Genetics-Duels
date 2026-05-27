@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 4126322630286695115}
   - component: {fileID: 472170536189038695}
   - component: {fileID: 9130837706107907867}
+  - component: {fileID: 5116960908267599362}
   m_Layer: 0
   m_Name: Momia
   m_TagString: Player
@@ -365,7 +366,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f8b67b74ed5c5443a1af72c6c1b5ca5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tier: 1
+--- !u!114 &5116960908267599362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012272116143410422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41bb4c4f2865b9043a7ce6406b850d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInsideBattleZone: 0
 --- !u!1 &6093619354908408536
 GameObject:
   m_ObjectHideFlags: 0

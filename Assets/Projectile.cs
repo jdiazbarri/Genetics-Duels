@@ -37,7 +37,7 @@ public class ArrowProjectile : MonoBehaviour
             newOwner.roboVida;
 
         hasPoison =
-            newOwner.GetComponent<Veneno>()
+            newOwner.GetComponent<Poison>()
             != null;
     }
 

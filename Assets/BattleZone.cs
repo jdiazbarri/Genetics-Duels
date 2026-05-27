@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class BattleZone : MonoBehaviour
 {
-    [SerializeField]
-    private BoxCollider2D zoneCollider;
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerTag tag = other.GetComponent<PlayerTag>();
+
+            if (tag != null)
+                tag.isInsideBattleZone = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerTag tag = other.GetComponent<PlayerTag>();
+
+            if (tag != null)
+                tag.isInsideBattleZone = false;
+        }
+    }
 
     public bool HasPlayers()
     {
-        Collider2D[] hits =
-            Physics2D.OverlapBoxAll(
-                zoneCollider.bounds.center,
-                zoneCollider.bounds.size,
-                0f
-            );
+        PlayerTag[] all =
+            GameObject.FindObjectsOfType<PlayerTag>();
 
-        foreach (Collider2D hit in hits)
+        foreach (var p in all)
         {
-            if (hit.CompareTag("Player"))
-            {
+            if (p.isInsideBattleZone)
                 return true;
-            }
         }
 
         return false;
