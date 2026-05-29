@@ -2,22 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que permite atacar múltiples objetivos de forma simultánea.
+//
+// El número de enemigos adicionales afectados depende del tier generado aleatoriamente.
 public class MultipleObjectives : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         int extraTargets = 1;
+
+        // =========================
+        // Escalado por tier
+        // =========================
 
         switch (tier)
         {
@@ -40,39 +47,24 @@ public class MultipleObjectives : MonoBehaviour, Skills
                 break;
         }
 
-        // APLICAR OBJETIVOS EXTRA
-        stats.AddTargets(
-            extraTargets
-        );
+        // =========================
+        // Aplicar habilidad
+        // =========================
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        stats.AddTargets(extraTargets);
 
-        skill.skillName =
+        // ===================================
+        // Información visual de la habilidad
+        // ====================================
 
-            "MultiTarget (+" +
+        SkillInfo skill = new SkillInfo();
 
-            extraTargets +
+        skill.skillName = "Multiobjetivos (+" + extraTargets + ") " + "-" + " " + "T" + tier;
 
-            ") - T" +
+        skill.description = "Ataca " + extraTargets +" enemigos extras";
 
-            tier;
-
-        skill.description =
-
-            "Attacks " +
-
-            extraTargets +
-
-            " extra enemies";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

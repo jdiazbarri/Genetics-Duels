@@ -247,6 +247,16 @@ public class GenericAI : MonoBehaviour
             // HACER DAÑO
             targetStats.vida -= finalDamage;
 
+            // SONIDO GOLPE
+            if (CompareTag("Player"))
+            {
+                SoundManager.instance.PlayPlayerHitSound();
+            }
+            else
+            {
+                SoundManager.instance.PlayEnemyHitSound();
+            }
+
             // ROBO VIDA
             float heal =
                 finalDamage * stats.roboVida;

@@ -2,24 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que intercambia vida máxima por defensa.
+//
+// El personaje sacrifica una parte de su vida para obtener una gran cantidad de defensa.
 public class DefenceForLife : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         float healthMultiplier = 1f;
 
         float defenseMultiplier = 1f;
+
+        // =========================
+        // Escalado por tier
+        // =========================
 
         switch (tier)
         {
@@ -48,7 +55,9 @@ public class DefenceForLife : MonoBehaviour, Skills
                 break;
         }
 
-        // APLICAR MULTIPLICADORES
+        // =========================
+        // Aplicar modificadores
+        // =========================
         stats.SetHealthMultiplier(
             healthMultiplier
         );
@@ -57,38 +66,18 @@ public class DefenceForLife : MonoBehaviour, Skills
             defenseMultiplier
         );
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        // ===================================
+        // Información visual de la habilidad
+        // ===================================
 
-        skill.skillName =
+        SkillInfo skill = new SkillInfo();
 
-            "ArmorForLife (" +
+        skill.skillName = "Defensa por vida (" + "-" + ((1f - healthMultiplier) * 100f) + "% vida) " + "-" + " " + "T" + tier;
 
-            "-" +
-            ((1f - healthMultiplier) * 100f) +
+        skill.description = "-" + ((1f - healthMultiplier) * 100f) + "% vida, +" + ((defenseMultiplier - 1f) * 100f) + "% defensa";
 
-            "% Health) - T" +
-
-            tier;
-
-        skill.description =
-
-            "-" +
-            ((1f - healthMultiplier) * 100f) +
-
-            "% health, +" +
-
-            ((defenseMultiplier - 1f) * 100f) +
-
-            "% defense";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

@@ -2,22 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que permite recuperar vida al atacar.
+//
+// La cantidad de vida recuperada depende del tier generado aleatoriamente.
 public class LifeSteal : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         float lifeSteal = 0f;
+
+        // =========================
+        // Escalado por tier
+        // =========================
 
         switch (tier)
         {
@@ -40,37 +47,24 @@ public class LifeSteal : MonoBehaviour, Skills
                 break;
         }
 
-        // APLICAR ROBO VIDA
-        stats.AddLifeSteal(
-            lifeSteal
-        );
+        // =========================
+        // Aplicar habilidad
+        // =========================
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        stats.AddLifeSteal(lifeSteal);
 
-        skill.skillName =
+        // ===================================
+        // Información visual de la habilidad
+        // ===================================
 
-            "LifeSteal (" +
+        SkillInfo skill = new SkillInfo();
 
-            (lifeSteal * 100f) +
+        skill.skillName = "Robo de vida (" + (lifeSteal * 100f) +"%) " + "-" + " " + "T" + tier;
 
-            "%) - T" +
+        skill.description = (lifeSteal * 100f) + "% de daño curado";
 
-            tier;
-
-        skill.description =
-
-            (lifeSteal * 100f) +
-
-            "% of damage heals the attacker";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

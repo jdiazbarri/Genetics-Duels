@@ -2,22 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que permite disparar múltiples proyectiles en cada ataque.
+//
+// El número de proyectiles adicionales depende del tier generado aleatoriamente.
+//
+// Esta habilidad únicamente afecta a personajes que utilizan ataques a distancia mediante proyectiles.
+// Las unidades cuerpo a cuerpo no obtienen beneficio de este modificador.
 public class MultipleAttacks : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         int extraProjectiles = 0;
+
+        // =========================
+        // Escalado por tier
+        // =========================
 
         switch (tier)
         {
@@ -40,39 +50,24 @@ public class MultipleAttacks : MonoBehaviour, Skills
                 break;
         }
 
-        // APLICAR PROYECTILES
-        stats.AddProjectiles(
-            extraProjectiles
-        );
+        // =========================
+        // Aplicar habilidad
+        // =========================
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        stats.AddProjectiles( extraProjectiles);
 
-        skill.skillName =
+        // ===================================
+        // Información visual de la habilidad
+        // ===================================
 
-            "MultiShot (+" +
+        SkillInfo skill = new SkillInfo();
 
-            extraProjectiles +
+        skill.skillName = "Multidisparo (+" + extraProjectiles + ") " + "-" + " " + "T" + tier;
 
-            ") - T" +
+        skill.description = "Disparos " + extraProjectiles +" proyectiles extras";
 
-            tier;
-
-        skill.description =
-
-            "Shoots " +
-
-            extraProjectiles +
-
-            " extra projectiles";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

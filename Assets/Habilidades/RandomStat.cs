@@ -2,23 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que genera una mutación aleatoria.
+//
+// El personaje recibe una gran mejora en una estadística concreta mientras el resto deatributos son reducidos.
+// El nivel de la mutación depende del tier generado.
 public class RandomStat : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Generar tier aleatorio y elegir estadistica a aumentar
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
-        int randomStat =
-            Random.Range(0, 6);
+        int randomStat = Random.Range(0, 6);
 
         string boostedStat = "";
 
@@ -26,211 +29,163 @@ public class RandomStat : MonoBehaviour, Skills
 
         float boostMultiplier = 1f;
 
-        // TIERS
+        // =========================
+        // Escalado por tiers 
+        // =========================
+
         switch (tier)
         {
             case 1:
 
-                // resto al 60%
                 reduceMultiplier = 0.6f;
 
-                // stat elegida x3
                 boostMultiplier = 3f;
 
                 break;
 
             case 2:
 
-                // resto al 50%
                 reduceMultiplier = 0.5f;
 
-                // stat elegida x4
                 boostMultiplier = 4f;
 
                 break;
 
             case 3:
 
-                // resto al 40%
                 reduceMultiplier = 0.4f;
 
-                // stat elegida x5
                 boostMultiplier = 5f;
 
                 break;
         }
 
-        // REDUCIR TODO
-        stats.SetDamageMultiplier(
-            reduceMultiplier
-        );
+        // =========================
+        // Reducir estadísticas base
+        // =========================
 
-        stats.SetAttackSpeedMultiplier(
-            reduceMultiplier
-        );
+        stats.SetDamageMultiplier(reduceMultiplier);
 
-        stats.SetDefenseMultiplier(
-            reduceMultiplier
-        );
+        stats.SetAttackSpeedMultiplier(reduceMultiplier);
 
-        stats.SetHealthMultiplier(
-            reduceMultiplier
-        );
+        stats.SetDefenseMultiplier(reduceMultiplier);
 
-        stats.AddCritChance(
-            -0.05f
-        );
+        stats.SetHealthMultiplier(reduceMultiplier);
 
-        stats.AddLifeSteal(
-            -0.05f
-        );
+        stats.AddCritChance(-0.05f);
 
-        // ELEGIR SOLO 1 STAT
+        stats.AddLifeSteal(-0.05f);
+
+        // =============================
+        // Potenciar estadistica elegida
+        // =============================
+
         switch (randomStat)
         {
-            // DAMAGE
+            // Daño
             case 0:
 
-                stats.SetDamageMultiplier(
-                    boostMultiplier
-                );
-
-                boostedStat =
-                    "Damage";
+                stats.SetDamageMultiplier(boostMultiplier);
+                boostedStat = "Daño";
 
                 break;
 
-            // ATTACK SPEED
+            // Velocidad de ataque
             case 1:
 
-                stats.SetAttackSpeedMultiplier(
-                    boostMultiplier
-                );
+                stats.SetAttackSpeedMultiplier(boostMultiplier);
 
-                boostedStat =
-                    "Attack Speed";
+                boostedStat = "Velocidad de Ataque";
 
                 break;
 
-            // DEFENSE
+            // Defensa
             case 2:
 
-                stats.SetDefenseMultiplier(
-                    boostMultiplier
-                );
+                stats.SetDefenseMultiplier(boostMultiplier);
 
-                boostedStat =
-                    "Defense";
+                boostedStat = "Defensa";
 
                 break;
 
-            // HEALTH
+            // Salud
             case 3:
 
-                stats.SetHealthMultiplier(
-                    boostMultiplier
-                );
+                stats.SetHealthMultiplier(boostMultiplier);
 
-                boostedStat =
-                    "Health";
+                boostedStat = "Vida";
 
                 break;
 
-            // CRITICAL
+            // Probabilidad crítica
             case 4:
 
                 switch (tier)
                 {
                     case 1:
 
-                        stats.AddCritChance(
-                            0.30f
-                        );
+                        stats.AddCritChance(0.30f);
 
                         break;
 
                     case 2:
 
-                        stats.AddCritChance(
-                            0.50f
-                        );
+                        stats.AddCritChance(0.50f);
 
                         break;
 
                     case 3:
 
-                        stats.AddCritChance(
-                            0.70f
-                        );
+                        stats.AddCritChance(0.70f);
 
                         break;
                 }
 
-                boostedStat =
-                    "Critical";
+                boostedStat = "Crítico";
 
                 break;
 
-            // LIFE STEAL
+            // Robo de vida
             case 5:
 
                 switch (tier)
                 {
                     case 1:
 
-                        stats.AddLifeSteal(
-                            0.15f
-                        );
+                        stats.AddLifeSteal(0.15f);
 
                         break;
 
                     case 2:
 
-                        stats.AddLifeSteal(
-                            0.30f
-                        );
+                        stats.AddLifeSteal(0.30f);
 
                         break;
 
                     case 3:
 
-                        stats.AddLifeSteal(
-                            0.50f
-                        );
+                        stats.AddLifeSteal(0.50f);
 
                         break;
                 }
 
-                boostedStat =
-                    "Life Steal";
+                boostedStat = "Robo de vida";
 
                 break;
         }
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        // ===================================
+        // Información visual de la habilidad
+        // ===================================
 
-        skill.skillName =
+        SkillInfo skill = new SkillInfo();
 
-            "Mutation (" +
+        skill.skillName = "Mutación (" + boostedStat + ")" + " " + "-" + " " + "T" + tier;
 
-            boostedStat +
+        skill.description = "Mejora un stat pero reduce el resto";
 
-            ") - T" +
-
-            tier;
-
-        skill.description =
-
-            "Boosts one stat and reduces the others";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

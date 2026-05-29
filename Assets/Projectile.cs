@@ -18,6 +18,8 @@ public class ArrowProjectile : MonoBehaviour
 
     private bool hasPoison;
 
+    private bool shotByPlayer;
+
     // RECIBIR DATOS
     public void SetTarget(
         Transform newTarget,
@@ -39,6 +41,8 @@ public class ArrowProjectile : MonoBehaviour
         hasPoison =
             newOwner.GetComponent<Poison>()
             != null;
+        shotByPlayer =
+    newOwner.CompareTag("Player");
     }
 
     void Update()
@@ -145,6 +149,16 @@ public class ArrowProjectile : MonoBehaviour
 
         // HACER DAÑO
         targetStats.vida -= finalDamage;
+
+        // SONIDO IMPACTO
+        if (shotByPlayer)
+        {
+            SoundManager.instance.PlayPlayerHitSound();
+        }
+        else
+        {
+            SoundManager.instance.PlayEnemyHitSound();
+        }
 
         // EVITAR NEGATIVOS
         if (targetStats.vida < 0)

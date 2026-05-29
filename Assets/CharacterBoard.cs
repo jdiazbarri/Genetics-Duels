@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 
 public class CharacterBoard : MonoBehaviour
@@ -113,30 +112,41 @@ public class CharacterBoard : MonoBehaviour
     }
 
     public void GenerateNewCards()
-{
-    ClearCards(); // elimina las anteriores
+    {
+        ClearCards();
 
         float startX =
-                -(cols - 1)
-                * spacing
-                / (-1.55f);
+            -(cols - 1)
+            * spacing
+            / (-1.55f);
 
         for (int col = 0; col < cols; col++)
-    {
-        float posX = startX + col * spacing;
-        float posY = 100f;
+        {
+            float posX =
+                startX + col * spacing;
 
-        Vector3 spawnPos =
-            new Vector3(posX, posY, 0);
+            float posY = 100f;
 
-        GameObject cardObj =
-            Instantiate(cardPrefab, spawnPos, Quaternion.identity);
+            Vector3 spawnPos =
+                new Vector3(posX, posY, 0);
 
-        CharacterCard card =
-            cardObj.GetComponent<CharacterCard>();
+            GameObject cardObj =
+                Instantiate(
+                    cardPrefab,
+                    spawnPos,
+                    Quaternion.identity
+                );
 
-        card.characterPrefabs = characterPrefabs;
-        card.Init(this);
+            CharacterCard card =
+                cardObj.GetComponent<CharacterCard>();
+
+            card.characterPrefabs =
+                characterPrefabs;
+
+            card.Init(this);
+
+            // IMPORTANTE
+            activeCards.Add(card);
+        }
     }
-}
 }
