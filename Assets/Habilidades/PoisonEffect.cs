@@ -2,38 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Componente responsable de aplicar daño periódicoa una unidad afectada por veneno.
+//
+// El efecto se ejecuta mediante una corrutina que reduce la vida del objetivo durante un tiempo determinado.
 public class PoisonEffect : MonoBehaviour
 {
     private CharacterStats stats;
 
-    public void ApplyPoison(
-        float damagePerSecond,
-        float duration
-    )
+    // Aplicar efecto de veneno
+    public void ApplyPoison(float damagePerSecond, float duration)
     {
         stats = GetComponent<CharacterStats>();
 
-        StartCoroutine(
-            PoisonCoroutine(
-                damagePerSecond,
-                duration
-            )
-        );
+        StartCoroutine(PoisonCoroutine(damagePerSecond, duration));
     }
 
-    IEnumerator PoisonCoroutine(
-        float damagePerSecond,
-        float duration
-    )
+    // Corrutina encargada de aplicar el daño periódico
+    IEnumerator PoisonCoroutine( float damagePerSecond, float duration)
     {
         float timer = 0;
 
         while (timer < duration)
         {
-            // HACER DAÑO
+            // Aplicar daño de veneno
             stats.vida -= damagePerSecond;
 
-            // MORIR
+            // Eliminar unidad si muere
             if (stats.vida <= 0)
             {
                 Destroy(gameObject);
@@ -41,6 +35,7 @@ public class PoisonEffect : MonoBehaviour
                 yield break;
             }
 
+            // Avanzar un segundo de duración
             timer += 1f;
 
             yield return new WaitForSeconds(1f);

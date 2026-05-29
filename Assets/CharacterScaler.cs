@@ -2,66 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Sistema encargado de escalar automáticamente las estadísticas de los personajes en función
+// del nivel actual de la partida.
 public class CharacterScaler : MonoBehaviour
 {
-    public void ScaleCharacter(
-        GameObject character,
-        int level,
-        string type
-    )
+    public void ScaleCharacter(GameObject character, int level, string type)
     {
-        CharacterStats stats =
-            character.GetComponent<CharacterStats>();
+        CharacterStats stats = character.GetComponent<CharacterStats>();
 
+        // Validar que el personaje tenga estadísticas
         if (stats == null)
         {
             return;
         }
 
-  
-
         float statBonus = 1f;
 
-        // ENEMIGOS
+        // =========================
+        // Escalado enemigos
+        // =========================
+
         if (type == "Enemy")
         {
-
-            // RESTO +5%
-            statBonus =
-                1f + (level * 0.05f);
+            // Aumento +5%
+            statBonus = 1f + (level * 0.05f);
         }
 
-        // PLAYER
+        // =========================
+        // Escalado aliados
+        // Esta escalado no se aplica actualmente, pero existe con fin de permitir al juego tener un sistema de estadisticas más robusto en caso de expandirlo en un futuro
+        // =========================
+
         if (type == "Player")
         {
-     
-
-            // RESTO +7%
-            statBonus =
-                1f + (level * 0.07f);
+            // Aumento +7%
+            statBonus = 1f + (level * 0.07f);
         }
 
+        // =========================
+        // Aplicar escalado
+        // =========================
 
+        stats.baseDFisico *= statBonus;
 
-        // DAÑO
-        stats.baseDFisico *=
-            statBonus;
+        stats.baseDefensa *= statBonus;
 
-        // DEFENSA
-        stats.baseDefensa *=
-            statBonus;
+        stats.SetHealthMultiplier(1f + (level * 0.05f));
 
-        // RECALCULAR
+        // Recalcular estadísticas finales
         stats.UpdateStats();
 
-        // CURAR
-        stats.vida =
-            stats.vidaMaxima;
-
-        Debug.Log(
-            stats.nombre +
-            " VIDA FINAL: " +
-            stats.vidaMaxima
-        );
+        // Restaurar vida completa
+        stats.vida = stats.vidaMaxima;
     }
 }

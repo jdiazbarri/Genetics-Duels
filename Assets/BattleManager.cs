@@ -25,6 +25,9 @@ public class BattleManager : MonoBehaviour
     private int maxSlots = 1;
 
     [SerializeField]
+    private TextMeshProUGUI slotsText;
+
+    [SerializeField]
     private List<GameObject> levels;
 
     [SerializeField]
@@ -39,6 +42,12 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private CharacterBoard characterBoard;
 
+    [SerializeField]
+    private GameObject gameOverPanel;
+
+    [SerializeField]
+    private GameObject victoryPanel;
+
     private int currentLevel = 0;
 
     private bool battleStarted = false;
@@ -52,6 +61,8 @@ public class BattleManager : MonoBehaviour
         UpdateLivesUI();
 
         UpdateCoinsUI();
+
+        UpdateSlotsUI();
 
         // DESACTIVAR TODOS
         for (int i = 0;
@@ -89,6 +100,7 @@ public class BattleManager : MonoBehaviour
 
         battleButton.colors =
             colors;
+
     }
 
     void Awake()
@@ -104,6 +116,8 @@ public class BattleManager : MonoBehaviour
         battleStarted = true;
         battleEnded = false;
 
+        SoundManager.instance.PlayBattleStartSound();
+
         // =========================
         // ?? LIMPIAR CARTAS
         // =========================
@@ -114,7 +128,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // ?? AJUSTAR SLOTS SEGÚN NIVEL
-        UpdateSlots();
+        
 
         // ?? VALIDAR EQUIPO FINAL
         ValidatePlayerSlots();
@@ -269,12 +283,16 @@ public class BattleManager : MonoBehaviour
 
             Debug.Log("VICTORIA");
 
+            SoundManager.instance.PlayLevelCompleteSound();
+
             if (monedas < maxMonedas)
             {
                 monedas++;
 
                 UpdateCoinsUI();
             }
+
+            
 
             // =========================
             //  NUEVAS CARTAS PARA SIGUIENTE RONDA
@@ -350,7 +368,7 @@ public class BattleManager : MonoBehaviour
         if (currentLevel
             >= levels.Count)
         {
-            Debug.Log("GANASTE");
+            Victory();
 
             return;
         }
@@ -358,6 +376,8 @@ public class BattleManager : MonoBehaviour
         // ACTIVAR NUEVO NIVEL
         levels[currentLevel]
             .SetActive(true);
+
+        UpdateSlots();
     }
 
     // PERDER VIDA
@@ -393,6 +413,19 @@ public class BattleManager : MonoBehaviour
     void GameOver()
     {
         Debug.Log("GAME OVER");
+
+        gameOverPanel.SetActive(true);
+
+        Time.timeScale = 0f;
+    }
+
+    void Victory()
+    {
+        Debug.Log("VICTORIA FINAL");
+
+        victoryPanel.SetActive(true);
+
+        Time.timeScale = 0f;
     }
 
     public int GetLives()
@@ -424,6 +457,14 @@ public class BattleManager : MonoBehaviour
     {
         // escala hasta 5 máximo
         maxSlots = Mathf.Clamp(currentLevel + 1, 1, 5);
+
+        UpdateSlotsUI();
+    }
+
+    void UpdateSlotsUI()
+    {
+        slotsText.text =
+            maxSlots.ToString();
     }
 
     private void ValidatePlayerSlots()

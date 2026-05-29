@@ -2,22 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que aumenta la probabilidad de realizar golpes críticos.
+//
+// Los golpes críticos duplican el daño infligido al objetivo.
+// La probabilidad de activación depende del tier generado aleatoriamente.
 public class Critical : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         float critChance = 0f;
+
+        // =========================
+        // Escalado por tier
+        // =========================
 
         switch (tier)
         {
@@ -40,32 +48,26 @@ public class Critical : MonoBehaviour, Skills
                 break;
         }
 
-        // APLICAR BONUS
+        // =========================
+        // Aplicar modificadores
+        // =========================
+
         stats.AddCritChance(
             critChance
         );
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        // ===================================
+        // Información visual de la habilidad
+        // ===================================
 
-        skill.skillName =
-            "Critical (" +
-            (critChance * 100f) +
-            "%) - T" +
-            tier;
+        SkillInfo skill = new SkillInfo();
 
-        skill.description =
-            "+" +
-            (critChance * 100f) +
-            "% critical chance";
+        skill.skillName = "Crítico (" + (critChance * 100f) + "%" + " - " + " " + "T" + tier;
 
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        skill.description = "+" + (critChance * 100f) + "% critical chance";
+
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

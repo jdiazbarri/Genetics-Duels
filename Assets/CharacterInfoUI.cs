@@ -3,31 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
+// Sistema encargado de mostrar en pantalla la información detallada de un personaje,
+// incluyendo estadísticas y habilidades.
 public class CharacterInfoUI : MonoBehaviour
 {
+    // Instancia global accesible desde otros sistemas
     public static CharacterInfoUI instance;
 
+    // Texto donde se muestran los datos
     [SerializeField]
     private TextMeshProUGUI infoText;
+
+    // Panel visual que contiene la información
+    [SerializeField]
+    private GameObject panel;
 
     private void Awake()
     {
         instance = this;
     }
 
+    private void Start()
+    {
+        panel.SetActive(false);
+    }
+
+    // Mostrar información del personaje 
     public void ShowInfo(CharacterStats stats)
     {
+        panel.SetActive(true);
+
         string skillText = "";
 
-        foreach (SkillInfo skill
-            in stats.skills)
+        // Construir lista de habilidades
+        foreach (SkillInfo skill in stats.skills)
         {
-            skillText +=
-                "\n• "
-                + skill.skillName;
+            skillText += "\n• " + skill.skillName;
         }
 
+        // Construcción dinámica del texto mostrado
         infoText.text =
             "Nombre: "
             + stats.nombre
@@ -37,29 +51,29 @@ public class CharacterInfoUI : MonoBehaviour
             + stats.tipoSangre
             + "\n"
 
-            + "•Vida: "
+            + "• Vida: "
             + FormatStat(stats.vida)
             + "/"
             + FormatStat(stats.vidaMaxima)
             + "\n"
 
-            + "•D. Físico: "
+            + "• Daño: "
             + FormatStat(stats.dFisico)
             + "\n"
 
-            + "•Vel. Ataque: "
+            + "• Vel. Ataque: "
             + FormatStat(stats.velocidadAtaque)
             + "\n"
 
-            + "•Crítico: "
+            + "• Crítico: "
             + FormatPercent(stats.critico)
             + "\n"
 
-            + "•Robo Vida: "
+            + "• Robo Vida: "
             + FormatPercent(stats.roboVida)
             + "\n"
 
-            + "•Defensa: "
+            + "• Defensa: "
             + FormatStat(stats.defensa)
             + "\n"
 
@@ -67,42 +81,36 @@ public class CharacterInfoUI : MonoBehaviour
             + skillText;
     }
 
-    // FORMATO NUMÉRICO
+    // =========================
+    // Formato numérico
+    // =========================
+
     string FormatStat(float value)
     {
-        // MILLONES En principio no se deberia llegar aquí
-        if (value >= 1000000)
-        {
-            return
-                (value / 1000000f)
-                .ToString("0.#")
-                + "M";
-        }
-
+ 
         // MILES
         if (value >= 1000)
         {
-            return
-                (value / 1000f)
-                .ToString("0.#")
-                + "K";
+            return (value / 1000f).ToString("0.#") + "K";
         }
 
-        // NORMAL
+        // Nornmal
         return value.ToString("0.##");
     }
 
-    // FORMATO %
+    // =========================
+    // Formato porcentajes
+    // =========================
+
     string FormatPercent(float value)
     {
-        return
-            (value * 100f)
-            .ToString("0.##")
-            + "%";
+        return (value * 100f).ToString("0.##") + "%";
     }
 
+    // Ocultar panel de información
     public void HideInfo()
     {
         infoText.text = "";
+        panel.SetActive(false);
     }
 }

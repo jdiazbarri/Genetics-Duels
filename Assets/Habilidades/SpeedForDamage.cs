@@ -2,67 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que intercambia daño por velocidad de ataque.
+//
+// Cuanto mayor es el tier de la habilidad,
+// menor daño inflige la unidad, pero más rápido ataca.
 public class SpeedForDamage : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         float damageMultiplier = 1f;
 
         float attackSpeedMultiplier = 1f;
 
+        // =========================
+        // Escalado por tier
+        // =========================
+
         switch (tier)
         {
             case 1:
 
-                // -80% daño
                 damageMultiplier = 0.2f;
 
-                // +300% velocidad
                 attackSpeedMultiplier = 4f;
 
                 break;
 
             case 2:
 
-                // -70% daño
                 damageMultiplier = 0.3f;
 
-                // +500% velocidad
                 attackSpeedMultiplier = 6f;
 
                 break;
 
             case 3:
 
-                // -60% daño
                 damageMultiplier = 0.4f;
 
-                // +700% velocidad
                 attackSpeedMultiplier = 8f;
-
-                break;
-
-            default:
-
-                damageMultiplier = 0.2f;
-
-                attackSpeedMultiplier = 4f;
 
                 break;
         }
 
-        // APLICAR MULTIPLICADORES
+        // =========================
+        // Aplicar modificadores
+        // =========================
+
         stats.SetDamageMultiplier(
             damageMultiplier
         );
@@ -71,42 +68,18 @@ public class SpeedForDamage : MonoBehaviour, Skills
             attackSpeedMultiplier
         );
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        // ===================================
+        // Información visual de la habilidad
+        // ====================================
+ 
+        SkillInfo skill = new SkillInfo();
 
-        skill.skillName =
+        skill.skillName = "Vel.ataque por daño  (" + "-" + ((1f - damageMultiplier) * 100f) + "% daño, +" + ((attackSpeedMultiplier - 1f) * 100f) + "% vel. Ataque) " + "-" + " " + "T" + tier;
 
-            "SpeedForDamage (" +
+        skill.description = "-" + ((1f - damageMultiplier) * 100f) +"% daño, +" + ((attackSpeedMultiplier - 1f) * 100f) +"% vel. Ataque";
 
-            "-" +
-            ((1f - damageMultiplier) * 100f) +
-
-            "% Damage, +" +
-
-            ((attackSpeedMultiplier - 1f) * 100f) +
-
-            "% Speed) - T" +
-
-            tier;
-
-        skill.description =
-
-            "-" +
-            ((1f - damageMultiplier) * 100f) +
-
-            "% damage, +" +
-
-            ((attackSpeedMultiplier - 1f) * 100f) +
-
-            "% attack speed";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }

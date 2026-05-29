@@ -2,30 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Habilidad que permite aplicar daño periódico de veneno a los enemigos tras impactar un ataque.
+//
+// La intensidad y duración del veneno dependen del tier generado aleatoriamente.
 public class Poison : MonoBehaviour, Skills
 {
+    // Nivel de rareza de la habilidad
     private int tier;
 
+    // Referencia a estadísticas del personaje
     private CharacterStats stats;
 
+    // Tier aleatorio
     void Start()
     {
-        stats =
-            GetComponent<CharacterStats>();
+        stats = GetComponent<CharacterStats>();
 
-        // TIER ALEATORIO
-        tier =
-            stats.GenerateTier();
+        tier = stats.GenerateTier();
 
         float poisonPercent = 0f;
 
         float poisonDuration = 0f;
 
+        // =========================
+        // Escalado por tier
+        // =========================
+
         switch (tier)
         {
             case 1:
 
-                // 3% durante 2s
                 poisonPercent = 0.03f;
 
                 poisonDuration = 2f;
@@ -34,7 +40,6 @@ public class Poison : MonoBehaviour, Skills
 
             case 2:
 
-                // 5% durante 3s
                 poisonPercent = 0.05f;
 
                 poisonDuration = 3f;
@@ -43,7 +48,6 @@ public class Poison : MonoBehaviour, Skills
 
             case 3:
 
-                // 8% durante 5s
                 poisonPercent = 0.08f;
 
                 poisonDuration = 5f;
@@ -51,38 +55,18 @@ public class Poison : MonoBehaviour, Skills
                 break;
         }
 
-        // INFO SKILL
-        SkillInfo skill =
-            new SkillInfo();
+        // ===================================
+        // Información visual de la habilidad
+        // ====================================
 
-        skill.skillName =
+        SkillInfo skill = new SkillInfo();
 
-            "Poison (" +
+        skill.skillName = "Veneno (" + (poisonPercent * 100f) + "%) " + " - " + " " + "T" + tier;
 
-            (poisonPercent * 100f) +
+        skill.description = "Aplica " + (poisonPercent * 100f) + "% daño " + poisonDuration + "s";
 
-            "%) - T" +
-
-            tier;
-
-        skill.description =
-
-            "Applies " +
-
-            (poisonPercent * 100f) +
-
-            "% damage over " +
-
-            poisonDuration +
-
-            "s";
-
-        // EVITAR DUPLICADOS
-        if (
-            !stats.HasSkill(
-                skill.skillName
-            )
-        )
+        // Evitar habilidades duplicadas
+        if (!stats.HasSkill(skill.skillName))
         {
             stats.skills.Add(skill);
         }
