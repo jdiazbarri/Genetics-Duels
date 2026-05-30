@@ -2,155 +2,128 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Gestiona el comportamiento de los proyectilesdisparados por personajes a distancia.
+//
+// El proyectil almacena una copia de las estadísticas necesarias del atacante para evitar depender de él una vez lanzado.
 public class ArrowProjectile : MonoBehaviour
 {
+    // =========================
+    // Configuración proyectil
+    // =========================
+
     [SerializeField]
     private float speed = 600f;
 
     private Transform target;
 
+    // =========================
+    // Copia de estadísticas
+    // =========================
+
     private float damage;
-
-    // COPIAS DE STATS
     private float critChance;
-
     private float lifeSteal;
-
+    private CharacterStats owner;
+    // Permite indentificar si puede usar veneno
     private bool hasPoison;
-
+    // Permite identificar si el disparo pertenece al jugador o al enemigo
     private bool shotByPlayer;
 
-    // RECIBIR DATOS
-    public void SetTarget(
-        Transform newTarget,
-        float newDamage,
-        CharacterStats newOwner
-    )
-    {
-        target = newTarget;
-
-        damage = newDamage;
-
-        // COPIAR STATS
-        critChance =
-            newOwner.critico;
-
-        lifeSteal =
-            newOwner.roboVida;
-
-        hasPoison =
-            newOwner.GetComponent<Poison>()
-            != null;
-        shotByPlayer =
-    newOwner.CompareTag("Player");
-    }
 
     void Update()
     {
         if (target == null)
         {
             Destroy(gameObject);
-
             return;
         }
 
-        // DIRECCIÓN
-        Vector2 direction =
-            target.position
-            - transform.position;
+        // Direcíón del proyectil
+        Vector2 direction = target.position - transform.position;
 
-        // ROTACIÓN
-        float angle =
-            Mathf.Atan2(
-                direction.y,
-                direction.x
-            ) * Mathf.Rad2Deg;
+        // Rotación del proyectil
+        float angle = Mathf.Atan2(  direction.y, direction.x) * Mathf.Rad2Deg;
 
-        transform.rotation =
-            Quaternion.Euler(
-                0,
-                0,
-                angle - 230f
-            );
+        transform.rotation = Quaternion.Euler(0,0,angle - 230f);
 
-        // MOVIMIENTO
-        transform.position =
-            Vector2.MoveTowards(
-                transform.position,
-                target.position,
-                speed * Time.deltaTime
-            );
+        // Movimiento del proyectil
+        transform.position = Vector2.MoveTowards( transform.position, target.position, speed * Time.deltaTime);
 
-        // DISTANCIA
-        float distance =
-            Vector2.Distance(
-                transform.position,
-                target.position
-            );
+        // Distancia del proyectil
+        float distance = Vector2.Distance( transform.position, target.position);
 
-        // IMPACTO
+        // Impacto
         if (distance < 10f)
         {
             HitTarget();
         }
     }
 
+    // Inicializa el proyectil con toda lainformación necesaria para el combate
+    public void SetTarget(Transform newTarget, float newDamage, CharacterStats newOwner)
+    {
+        target = newTarget;
+        damage = newDamage;
+        // Copiar estadísticas relevantes del atacante.
+        critChance = newOwner.criticalChance;
+        lifeSteal = newOwner.lifeSteal;
+        hasPoison = newOwner.GetComponent<Poison>() != null;
+        shotByPlayer = newOwner.CompareTag("Player");
+        owner = newOwner;
+    }
+
+    // Aplica el daño final al objetivo teniendo en cuenta críticos, defensa y efectos
     void HitTarget()
     {
         if (target == null)
         {
             Destroy(gameObject);
-
             return;
         }
 
-        CharacterStats targetStats =
-            target.GetComponent<CharacterStats>();
+        CharacterStats targetStats = target.GetComponent<CharacterStats>();
 
-        // TARGET INVÁLIDO
+        // Objetivo invalido
         if (targetStats == null)
         {
             Destroy(gameObject);
-
             return;
         }
 
-        // TARGET YA MUERTO
-        if (targetStats.vida <= 0)
+        // Objetivo ya está muerto
+        if (targetStats.health <= 0)
         {
             Destroy(gameObject);
-
             return;
         }
 
-        // DAÑO BASE
-        float baseDamage =
-            damage;
+        // Daño base
+        float baseDamage = damage;
 
-        // CRÍTICO
-        bool criticalHit =
-            Random.value < critChance;
+        // Daño crítico
+        bool criticalHit = Random.value < critChance;
 
         if (criticalHit)
         {
             baseDamage *= 2f;
         }
 
-        // DEFENSA
-        float finalDamage =
-            baseDamage
-            - targetStats.defensa;
+        // Reduccion de daño por defensa
+        float finalDamage = baseDamage - targetStats.defense;
 
-        // DAÑO MÍNIMO
+        // Daño mínimo
         if (finalDamage < 1)
         {
             finalDamage = 1;
         }
 
-        // HACER DAÑO
-        targetStats.vida -= finalDamage;
+        // Aplicar daño
+        targetStats.health -= finalDamage;
 
-        // SONIDO IMPACTO
+        // =========================
+        // Efectos de sonido
+        // =========================
+
         if (shotByPlayer)
         {
             SoundManager.instance.PlayPlayerHitSound();
@@ -160,13 +133,16 @@ public class ArrowProjectile : MonoBehaviour
             SoundManager.instance.PlayEnemyHitSound();
         }
 
-        // EVITAR NEGATIVOS
-        if (targetStats.vida < 0)
+        // Evitar valor negativos
+        if (targetStats.health < 0)
         {
-            targetStats.vida = 0;
+            targetStats.health = 0;
         }
 
-        // VENENO
+        // =========================
+        // Efectos de ataque
+        // =========================
+
         if (hasPoison)
         {
             PoisonEffect effect =
@@ -184,21 +160,25 @@ public class ArrowProjectile : MonoBehaviour
             );
         }
 
-        // ROBO VIDA
-        // SOLO SI EL TARGET SIGUE VIVO
-        if (targetStats.vida > 0)
+        if (owner != null && lifeSteal > 0)
         {
-            // Aquí podrías curar al owner
-            // si más adelante guardas referencia segura
+            float healAmount = finalDamage * lifeSteal;
+
+            owner.health += healAmount;
+
+            if (owner.health > owner.maxHealth)
+            {
+                owner.health = owner.maxHealth;
+            }
         }
 
-        // MORIR
-        if (targetStats.vida <= 0)
+        // Eliminar objetivo si muere
+        if (targetStats.health <= 0)
         {
             Destroy(target.gameObject);
         }
 
-        // DESTRUIR PROYECTIL
+        // Eliminar proyectil
         Destroy(gameObject);
     }
 }

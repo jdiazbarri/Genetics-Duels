@@ -166,16 +166,16 @@ public class BattleManager : MonoBehaviour
             // =========================
             // IA
             // =========================
-            GenericAI ai =
-                player.GetComponent<GenericAI>();
+            MeleeAI ai =
+                player.GetComponent<MeleeAI>();
 
             if (ai != null)
             {
                 ai.ActivateAI();
             }
 
-            AliadoDistanciaIA ranged =
-                player.GetComponent<AliadoDistanciaIA>();
+            RangedAI ranged =
+                player.GetComponent<RangedAI>();
 
             if (ranged != null)
             {
@@ -191,16 +191,16 @@ public class BattleManager : MonoBehaviour
 
         foreach (GameObject enemy in enemies)
         {
-            GenericAI ai =
-                enemy.GetComponent<GenericAI>();
+            MeleeAI ai =
+                enemy.GetComponent<MeleeAI>();
 
             if (ai != null)
             {
                 ai.ActivateAI();
             }
 
-            AliadoDistanciaIA ranged =
-                enemy.GetComponent<AliadoDistanciaIA>();
+            RangedAI ranged =
+                enemy.GetComponent<RangedAI>();
 
             if (ranged != null)
             {
@@ -237,8 +237,8 @@ public class BattleManager : MonoBehaviour
                 in players)
             {
                 // IA MELEE
-                GenericAI ai =
-                    player.GetComponent<GenericAI>();
+                MeleeAI ai =
+                    player.GetComponent<MeleeAI>();
 
                 if (ai != null)
                 {
@@ -246,8 +246,8 @@ public class BattleManager : MonoBehaviour
                 }
 
                 // IA DISTANCIA
-                AliadoDistanciaIA ranged =
-                    player.GetComponent<AliadoDistanciaIA>();
+                RangedAI ranged =
+                    player.GetComponent<RangedAI>();
 
                 if (ranged != null)
                 {
@@ -312,8 +312,8 @@ public class BattleManager : MonoBehaviour
                 in players)
             {
                 // IA MELEE
-                GenericAI ai =
-                    player.GetComponent<GenericAI>();
+                MeleeAI ai =
+                    player.GetComponent<MeleeAI>();
 
                 if (ai != null)
                 {
@@ -321,8 +321,8 @@ public class BattleManager : MonoBehaviour
                 }
 
                 // IA DISTANCIA
-                AliadoDistanciaIA ranged =
-                    player.GetComponent<AliadoDistanciaIA>();
+                RangedAI ranged =
+                    player.GetComponent<RangedAI>();
 
                 if (ranged != null)
                 {
@@ -346,8 +346,8 @@ public class BattleManager : MonoBehaviour
 
                 if (stats != null)
                 {
-                    stats.vida =
-                        stats.vidaMaxima;
+                    stats.health =
+                        stats.maxHealth;
                 }
             }
 

@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Clase encargada de gestionar la generación de la cuadrícula de combate y enemigos.
 public class GridManager : MonoBehaviour
 {
+    // =========================
+    // Configuración del tablero
+    // =========================
+
     [SerializeField]
     private int rows = 7;
 
@@ -17,185 +22,124 @@ public class GridManager : MonoBehaviour
     [SerializeField]
     private float wallScale = 0.65f;
 
-    // ENEMIGOS DEL NIVEL
+    // =========================
+    // Datos internos
+    // =========================
+
     [SerializeField]
     private GameObject[] enemyPrefabs;
 
-    // ESCALADOR
     [SerializeField]
     private CharacterScaler characterScaler;
 
-    // BATTLE MANAGER
     [SerializeField]
     private BattleManager battleManager;
 
-    // TODOS LOS TILES
     private GameObject[,] gridTiles;
 
     void Start()
     {
         GenerateGrid();
-
         SpawnEnemies();
     }
 
+    // Construir la cuadrícula
     private void GenerateGrid()
     {
-        // MATRIZ
-        gridTiles =
-            new GameObject[rows, cols];
+        // Objetos visuales para la cuadrícula
+        gridTiles = new GameObject[rows, cols];
 
-        GameObject iceTile =
-            Resources.Load<GameObject>(
-                "ice"
-            );
+        GameObject insideTile = Resources.Load<GameObject>("MargenMapa");
 
-        GameObject wallTile =
-            Resources.Load<GameObject>(
-                "Muro"
-            );
+        GameObject wallTile = Resources.Load<GameObject>("Muro");
 
-        for (
-            int row = 0;
-            row < rows;
-            row++
-        )
+        // Creación automÁtica de la cuadrícula
+        for (int row = 0; row < rows; row++)
         {
-            for (
-                int col = 0;
-                col < cols;
-                col++
-            )
+            for (int col = 0;col < cols; col++)
             {
                 GameObject prefabToSpawn;
 
-                // BORDES
-                if (
-                    row == 0
-                    || row == rows - 1
-                    || col == 0
-                    || col == cols - 1
-                )
+                // Limites de la cuadrícula
+                if ( row == 0 || row == rows - 1 || col == 0 || col == cols - 1)
                 {
-                    prefabToSpawn =
-                        wallTile;
+                    prefabToSpawn = wallTile;
                 }
                 else
                 {
-                    prefabToSpawn =
-                        iceTile;
+                    prefabToSpawn = insideTile;
                 }
 
-                // CREAR TILE
-                GameObject tile =
-                    Instantiate(
-                        prefabToSpawn,
-                        transform
-                    );
+                // Crear tile
+                GameObject tile =Instantiate(prefabToSpawn, transform);
 
-                gridTiles[row, col] =
-                    tile;
+                gridTiles[row, col] = tile;
 
-                // GRID TILE
-                if (
-                    prefabToSpawn
-                    == iceTile
-                )
+                // Crear base
+                if (prefabToSpawn == insideTile)
                 {
-                    GridTile gridTile =
-                        tile.AddComponent<GridTile>();
+                    GridTile gridTile = tile.AddComponent<GridTile>();
 
                     gridTile.row = row;
-
                     gridTile.col = col;
 
-                    // ZONA JUGADOR
                     if (col < 4)
                     {
-                        gridTile.playerZone =
-                            true;
+                        gridTile.playerZone = true;
                     }
                 }
 
-                // POSICIÓN
-                float posX =
-                    col * tileSize;
+                // Posición de la cuadricula
+                float posX = col * tileSize;
+                float posY = row * tileSize;
 
-                float posY =
-                    row * tileSize;
+                tile.transform.position = new Vector2( posX, posY);
 
-                tile.transform.position =
-                    new Vector2(
-                        posX,
-                        posY
-                    );
+                // Escala de tamaño
+                tile.transform.localScale = Vector3.one* tileSize;
 
-                // ESCALA NORMAL
-                tile.transform.localScale =
-                    Vector3.one
-                    * tileSize;
-
-                // ESCALA MURALLA
-                if (
-                    prefabToSpawn
-                    == wallTile
-                )
+                // Escala de tamaño muralla
+                if (prefabToSpawn == wallTile)
                 {
-                    tile.transform.localScale =
-                        Vector3.one
-                        * tileSize
-                        * wallScale;
+                    tile.transform.localScale = Vector3.one * tileSize * wallScale;
                 }
             }
         }
 
-        // CENTRAR GRID
-        float gridWidth =
-            cols * tileSize;
+        // Centrar cuadrícula
+        float gridWidth = cols * tileSize;
 
-        float gridHeight =
-            rows * tileSize;
+        float gridHeight = rows * tileSize;
 
-        transform.position =
-            new Vector2(
-                -gridWidth / 2
-                + tileSize / 2,
-
-                -gridHeight / 2
-                + tileSize / 2
-            );
+        transform.position = new Vector2( -gridWidth / 2 + tileSize / 2, - gridHeight / 2 + tileSize / 2);
     }
 
+    // Generar enemigos
     void SpawnEnemies()
     {
-        // COLUMNA DERECHA
-        int spawnCol =
-            cols - 2;
+        int startCol = cols - 2;
+        int startRow = rows - 2;
 
-        // FILA SUPERIOR
-        int startRow =
-            rows - 2;
+        int currentCol = startCol;
+        int currentRow = startRow;
 
-        for (
-            int i = 0;
-            i < enemyPrefabs.Length;
-            i++
-        )
+        for (int i = 0; i < enemyPrefabs.Length; i++)
         {
-            // ARRIBA ? ABAJO
-            int row =
-                startRow - i;
+            if (currentRow <= 0)
+            {
+                currentCol--;
 
-            // EVITAR MURO
-            if (row <= 0)
+                currentRow = startRow;
+            }
+
+            if (currentCol <= 0)
             {
                 break;
             }
 
             GameObject targetTile =
-                gridTiles[row, spawnCol];
+                gridTiles[currentRow, currentCol];
 
-            // CREAR ENEMIGO
             GameObject enemy =
                 Instantiate(
                     enemyPrefabs[i],
@@ -203,16 +147,13 @@ public class GridManager : MonoBehaviour
                     Quaternion.identity
                 );
 
-            // ESCALAR ENEMIGO
             characterScaler.ScaleCharacter(
                 enemy,
                 battleManager.GetCurrentLevel(),
                 "Enemy"
             );
-        }
 
-        Debug.Log(
-            "ENEMIGOS SPAWNEADOS"
-        );
+            currentRow--;
+        }
     }
 }

@@ -44,37 +44,37 @@ public class CharacterInfoUI : MonoBehaviour
         // Construcción dinámica del texto mostrado
         infoText.text =
             "Nombre: "
-            + stats.nombre
+            + stats.characterName
             + "\n"
 
             + "Sangre: "
-            + stats.tipoSangre
+            + stats.bloodTypes
             + "\n"
 
             + "• Vida: "
-            + FormatStat(stats.vida)
+            + FormatStat(stats.health)
             + "/"
-            + FormatStat(stats.vidaMaxima)
+            + FormatStat(stats.maxHealth)
             + "\n"
 
             + "• Daño: "
-            + FormatStat(stats.dFisico)
+            + FormatStat(stats.damage)
             + "\n"
 
             + "• Vel. Ataque: "
-            + FormatStat(stats.velocidadAtaque)
+            + FormatStat(stats.attackSpeed)
             + "\n"
 
             + "• Crítico: "
-            + FormatPercent(stats.critico)
+            + FormatPercent(stats.criticalChance)
             + "\n"
 
             + "• Robo Vida: "
-            + FormatPercent(stats.roboVida)
+            + FormatPercent(stats.lifeSteal)
             + "\n"
 
             + "• Defensa: "
-            + FormatStat(stats.defensa)
+            + FormatStat(stats.defense)
             + "\n"
 
             + "\nHabilidades:"
