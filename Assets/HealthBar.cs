@@ -23,6 +23,6 @@ public class HealthBar : MonoBehaviour
     // Actualizar porcentaje de vida visible
     void Update()
     {
-        fillImage.fillAmount = stats.vida / stats.vidaMaxima;
+        fillImage.fillAmount = stats.health / stats.maxHealth;
     }
 }

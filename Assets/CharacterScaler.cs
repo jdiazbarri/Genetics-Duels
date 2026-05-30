@@ -43,9 +43,9 @@ public class CharacterScaler : MonoBehaviour
         // Aplicar escalado
         // =========================
 
-        stats.baseDFisico *= statBonus;
+        stats.baseDamage *= statBonus;
 
-        stats.baseDefensa *= statBonus;
+        stats.baseDefense *= statBonus;
 
         stats.SetHealthMultiplier(1f + (level * 0.05f));
 
@@ -53,6 +53,6 @@ public class CharacterScaler : MonoBehaviour
         stats.UpdateStats();
 
         // Restaurar vida completa
-        stats.vida = stats.vidaMaxima;
+        stats.health = stats.maxHealth;
     }
 }

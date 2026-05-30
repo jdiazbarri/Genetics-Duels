@@ -2,143 +2,131 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Almacena todas las estadísticas de combate de un personaje.
+//
+// Esta clase actúa como núcleo del sistema de atributos,permitiendo aplicar modificadores procedentes de habilidades y mecánicas genéticas.
 public class CharacterStats : MonoBehaviour
 {
-    public string nombre = "Nombre";
+    // =========================
+    // Información personaje
+    // =========================
 
-    // VIDA
-    public float vidaMaxima = 0;
-    public float vida = 0;
+    public string characterName = "Nombre";
 
-    // BASE
-    public float baseDFisico = 0;
-    public float baseDefensa = 0f;
-    public float baseVelocidadAtaque = 1;
-    public float baseCritico = 0f;
-    public float baseRoboVida = 0f;
+    // Vida base
+    public float maxHealth = 0;
+    public float health = 0;
 
+    // Valores base
+    public float baseDamage = 0f;
+    public float baseDefense = 0f;
+    public float baseAttackSpeed = 1f;
+    public float baseCriticalChance = 0f;
+    public float baseLifeSteal = 0f;
 
-    public int numeroProyectiles = 1;
+    // Efectos de ataque
+    public int projectileCount = 1;
+    public int attackCount = 1;
+    public int targetCount = 1;
 
-    public int numeroAtaques = 1;
+    // Tipo de sangre
+    public string bloodTypes;
 
-    public int numeroObjetivos = 1;
-
-    public string tipoSangre;
-
-    // FINALES
-    public float dFisico;
-
-    public float velocidadAtaque;
-
-    public float critico;
-
-    public float roboVida;
-
-    public float defensa;
+    // Valores finales
+    public float damage;
+    public float attackSpeed;
+    public float criticalChance;
+    public float lifeSteal;
+    public float defense;
 
     // MULTIPLICADORES
     private float damageMultiplier = 1f;
-
     private float attackSpeedMultiplier = 1f;
-
     private float defenseMultiplier = 1f;
 
     // BONUS PLANOS
     private float critBonus = 0f;
-
     private float lifeStealBonus = 0f;
 
     // HABILIDADES ACTIVAS
-    public List<SkillInfo> skills =
-        new List<SkillInfo>();
+    public List<SkillInfo> skills = new List<SkillInfo>();
 
-    // Tipo de sangre
-    string[] tipos =
+    // Tipos de sangre
+    string[] bloodTypesList =
         {
         "A","B","C","D",
         "E","F","G","H",
         "I","J","K","L"
         };
 
+    // Crear conjunto de estadisticas del personaje
     void Start()
     {
-        AsignarTipoGenetico();
+        // Asignar un tipo de sangre
+        AssignBloodType();
+        // Calcular estadísticas finales
         UpdateStats();
     }
 
+    // Actuallizar estadisticas
     public void UpdateStats()
     {
-        // DAÑO
-        dFisico =
-            baseDFisico * damageMultiplier;
+        damage = baseDamage * damageMultiplier;
 
-        // VELOCIDAD ATAQUE
-        velocidadAtaque =
-            baseVelocidadAtaque *
-            attackSpeedMultiplier;
+        attackSpeed = baseAttackSpeed * attackSpeedMultiplier;
 
-        // CRTICO
-        critico =
-            baseCritico + critBonus;
+        criticalChance = baseCriticalChance + critBonus;
 
-        // ROBO VIDA
-        roboVida =
-            baseRoboVida + lifeStealBonus;
+        lifeSteal = baseLifeSteal + lifeStealBonus;
 
-        // DEFENSA
-        defensa =
-            baseDefensa * defenseMultiplier;
 
-        // LIMITES
+        defense = baseDefense * defenseMultiplier;
 
-        if (dFisico < 1)
+        // =========================
+        // Límites mínimos
+        // =========================
+
+        if (damage < 1)
         {
-            dFisico = 1;
+            damage = 1;
         }
 
-        if (vidaMaxima < 1)
+        if (maxHealth < 1)
         {
-            vidaMaxima = 1;
+            maxHealth = 1;
         }
 
-        if (velocidadAtaque < 0.1f)
+        if (attackSpeed < 0.1f)
         {
-            velocidadAtaque = 0.1f;
+            attackSpeed = 0.1f;
         }
 
-        if (defensa < 0)
+        if (defense < 0)
         {
-            defensa = 0;
+            defense = 0;
         }
 
-        // CRTICO 0% ? 100%
-        critico = Mathf.Clamp(
-            critico,
-            0f,
-            1f
-        );
-
-        // ROBO VIDA 0% ? 100%
-        roboVida = Mathf.Clamp(
-            roboVida,
-            0f,
-            3f
-        );
-
-        if (vida > vidaMaxima)
+        if (health > maxHealth)
         {
-            vida = vidaMaxima;
+            health = maxHealth;
         }
 
-        if (vida < 0)
+        if (health < 0)
         {
-            vida = 0;
+            health = 0;
         }
+
+        // =========================
+        // Límites porcentuales
+        // ========================
+
+        criticalChance = Mathf.Clamp(criticalChance, 0f, 1f);
+
+        lifeSteal = Mathf.Clamp(lifeSteal, 0f, 3f);
     }
 
     // =========================
-    // MULTIPLICADORES
+    // Multiplicadores
     // =========================
 
     public void SetDamageMultiplier(float value)
@@ -164,13 +152,13 @@ public class CharacterStats : MonoBehaviour
 
     public void SetHealthMultiplier(float value)
     {
-        vidaMaxima *= value;
+        maxHealth *= value;
 
-        vida = vidaMaxima;
+        health = maxHealth;
     }
 
     // =========================
-    // BONUS PLANOS
+    // Bonus planos
     // =========================
 
     public void AddCritChance(float value)
@@ -193,44 +181,29 @@ public class CharacterStats : MonoBehaviour
 
     public void AddProjectiles(int amount)
     {
-        numeroProyectiles += amount;
+        projectileCount += amount;
     }
 
     public void AddAttacks(int amount)
     {
-        numeroAtaques += amount;
+        attackCount += amount;
     }
 
     public void AddTargets(int amount)
     {
-        numeroObjetivos += amount;
-    }
-
-    void AsignarTipoGenetico()
-    {
-        tipoSangre =
-            tipos[
-                Random.Range(0, tipos.Length)
-            ];
+        targetCount += amount;
     }
 
     // =========================
-    // UI HOVER
+    // Métodos auxiliares
     // =========================
 
-    private void OnMouseEnter()
+    void AssignBloodType()
     {
-        CharacterInfoUI.instance.ShowInfo(this);
+        bloodTypes = bloodTypesList[Random.Range(0, bloodTypesList.Length)];
     }
 
-    private void OnMouseExit()
-    {
-        CharacterInfoUI.instance.HideInfo();
-    }
-
-    public bool HasSkill(
-    string skillName
-)
+    public bool HasSkill(string skillName)
     {
         foreach (SkillInfo skill
             in skills)
@@ -249,19 +222,35 @@ public class CharacterStats : MonoBehaviour
     {
         float roll = Random.value;
 
-        // 92%
         if (roll <= 0.92f)
         {
             return 1;
         }
 
-        // 7%
         if (roll <= 0.99f)
         {
             return 2;
         }
 
-        // 1%
         return 3;
+    }
+
+    // =========================
+    // UI de las estadisticas
+    // =========================
+
+    private void OnMouseEnter()
+    {
+        if (CompareTag("NoHover"))
+        {
+            return;
+        }
+
+        CharacterInfoUI.instance.ShowInfo(this);
+    }
+
+    private void OnMouseExit()
+    {
+        CharacterInfoUI.instance.HideInfo();
     }
 }

@@ -25,10 +25,10 @@ public class PoisonEffect : MonoBehaviour
         while (timer < duration)
         {
             // Aplicar daño de veneno
-            stats.vida -= damagePerSecond;
+            stats.health -= damagePerSecond;
 
             // Eliminar unidad si muere
-            if (stats.vida <= 0)
+            if (stats.health <= 0)
             {
                 Destroy(gameObject);
 
