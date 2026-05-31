@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8443563994979858060}
   - component: {fileID: 5289028926990480189}
   m_Layer: 0
-  m_Name: muralla
+  m_Name: Muralla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

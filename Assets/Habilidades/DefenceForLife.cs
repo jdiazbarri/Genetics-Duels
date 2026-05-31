@@ -58,13 +58,9 @@ public class DefenceForLife : MonoBehaviour, Skills
         // =========================
         // Aplicar modificadores
         // =========================
-        stats.SetHealthMultiplier(
-            healthMultiplier
-        );
+        stats.SetHealthMultiplier(healthMultiplier);
 
-        stats.SetDefenseMultiplier(
-            defenseMultiplier
-        );
+        stats.SetDefenseMultiplier(defenseMultiplier);
 
         // ===================================
         // Información visual de la habilidad
@@ -72,7 +68,7 @@ public class DefenceForLife : MonoBehaviour, Skills
 
         SkillInfo skill = new SkillInfo();
 
-        skill.skillName = "Defensa por vida (" + "-" + ((1f - healthMultiplier) * 100f) + "% vida) " + "-" + " " + "T" + tier;
+        skill.skillName = "Defensa por vida (" + "-"+ ((1f - healthMultiplier) * 100f) + "% vida, " + "+" + ((defenseMultiplier - 1f) * 100f) + "% defensa)" + " " + "-" + " " + "T" + tier;
 
         skill.description = "-" + ((1f - healthMultiplier) * 100f) + "% vida, +" + ((defenseMultiplier - 1f) * 100f) + "% defensa";
 

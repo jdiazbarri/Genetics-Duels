@@ -128,7 +128,7 @@ public class RangedAI : MonoBehaviour
             {
                 // Creación y configuración del proyectil
                 GameObject arrow = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
-                ArrowProjectile projectile = arrow.GetComponent<ArrowProjectile>();
+                Projectile projectile = arrow.GetComponent<Projectile>();
                 projectile.SetTarget(enemy,stats.damage, stats);
                 // Separación temporal entre proyectil, para evitar que visualmente solo se vea uno
                 yield return new WaitForSeconds(0.01f);

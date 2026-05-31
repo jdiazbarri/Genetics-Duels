@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class fps : MonoBehaviour
+// Clase auxiliar para test de rendimiento
+public class FPS : MonoBehaviour
 {
     float deltaTime = 0.0f;
 
@@ -15,15 +16,8 @@ public class fps : MonoBehaviour
 
     void Update()
     {
-        deltaTime +=
-            (
-                Time.unscaledDeltaTime
-                - deltaTime
-            )
-            * 0.1f;
-
-        float currentFps =
-            1.0f / deltaTime;
+        deltaTime += ( Time.unscaledDeltaTime - deltaTime) * 0.1f;
+        float currentFps = 1.0f / deltaTime;
 
         // Guardar el más bajo DURANTE este segundo
         if (currentFps < secondMinFps)
@@ -31,90 +25,43 @@ public class fps : MonoBehaviour
             secondMinFps = currentFps;
         }
 
-        // Contador de tiempo
         timer += Time.unscaledDeltaTime;
 
-        // Cada 1 segundo
         if (timer >= 1f)
         {
-            // Actualizar el valor visible
             minFps = secondMinFps;
-
-            // Reiniciar medición
             secondMinFps = Mathf.Infinity;
-
             timer = 0f;
         }
     }
 
+    // Visualización
     void OnGUI()
     {
         int w = Screen.width;
-
         int h = Screen.height;
 
-        GUIStyle style =
-            new GUIStyle();
+        GUIStyle style = new GUIStyle();
 
-        Rect rect =
-            new Rect(
-                0,
-                0,
-                w,
-                h * 6 / 100
-            );
+        Rect rect = new Rect(0, 0, w, h * 6 / 100);
 
-        style.alignment =
-            TextAnchor.UpperLeft;
+        style.alignment = TextAnchor.UpperLeft;
 
-        style.fontSize =
-            h * 2 / 100;
+        style.fontSize = h * 2 / 100;
 
-        style.normal.textColor =
-            new Color(
-                0.0f,
-                0.0f,
-                0.5f,
-                1.0f
-            );
+        style.normal.textColor = new Color(0.0f, 0.0f, 0.5f, 1.0f);
 
-        float msec =
-            deltaTime * 1000.0f;
+        float msec = deltaTime * 1000.0f;
 
-        float fps =
-            1.0f / deltaTime;
+        float fps = 1.0f / deltaTime;
 
-        // PLAYERS
-        int playerCount = GameObject
-            .FindGameObjectsWithTag(
-                "Player"
-            )
-            .Length; ;
+        // Aliados
+        int playerCount = GameObject.FindGameObjectsWithTag("Player").Length; ;
 
-        // ENEMIGOS
-        int enemyCount = GameObject
-            .FindGameObjectsWithTag(
-                "Enemigo"
-            )
-            .Length; ; 
+        // Enemigos
+        int enemyCount = GameObject.FindGameObjectsWithTag("Enemigo").Length; ; 
 
-        string text =
-            string.Format(
-                "{0:0.0} ms ({1:0.} fps)\n" +
-                "MIN FPS (1s): {2:0.}\n" +
-                "Players: {3}\n" +
-                "Enemies: {4}",
-                msec,
-                fps,
-                minFps,
-                playerCount,
-                enemyCount
-            );
-
-        GUI.Label(
-            rect,
-            text,
-            style
-        );
+        string text = string.Format( "{0:0.0} ms ({1:0.} fps)\n" + "MIN FPS (1s): {2:0.}\n" + "Players: {3}\n" + "Enemies: {4}", msec, fps, minFps, playerCount,enemyCount);
+        GUI.Label(rect, text, style);
     }
 }
