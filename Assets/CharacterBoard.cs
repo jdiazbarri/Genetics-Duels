@@ -27,18 +27,29 @@ public class CharacterBoard : MonoBehaviour
     // Personajes generados desde las cartas
     private List<GameObject> spawnedCharacters = new List<GameObject>();
 
+    // Límite de cartas que el jugador puede activar 
+    private int maxActiveCards = 1;
+
+    // Cuántas cartas se han activado en la ronda actual
+    private int activatedCardCount = 0;
+
     void Start()
     {
-        GenerateBoard();
+        SpawnCards();
     }
 
-    //Creación de las cartas
-    void GenerateBoard()
+    // Llamado por BattleManager para sincronizar el límite con maxSlots
+    public void SetMaxActiveCards(int max)
     {
-        // Punto de inicio
-        float startX =  -(cols - 1)* spacing / (-1.55f);
-        
-        // Creación dinámica de las cartas
+        maxActiveCards = max;
+        activatedCardCount = 0;
+    }
+
+    // Genera una tanda de cartas iniciales
+    void SpawnCards()
+    {
+        float startX = -(cols - 1) * spacing / (-1.55f);
+
         for (int col = 0; col < cols; col++)
         {
             float posX = startX + col * spacing;
@@ -47,7 +58,6 @@ public class CharacterBoard : MonoBehaviour
             GameObject cardObj = Instantiate(cardPrefab, spawnPos, Quaternion.identity);
             CharacterCard card = cardObj.GetComponent<CharacterCard>();
 
-            // Asignar personajes posibles y vincular con tablero
             card.characterPrefabs = characterPrefabs;
             card.Init(this);
             activeCards.Add(card);
@@ -58,75 +68,62 @@ public class CharacterBoard : MonoBehaviour
     public void OnCardClicked(CharacterCard card)
     {
         if (card == null)
-        {
             return;
-        }
 
-        // Seleccionar personaje aleatorio.
-        GameObject prefab = card.characterPrefabs[Random.Range(0, card.characterPrefabs.Length)];
+        // Bloquear si ya se alcanzó el límite de cartas activadas
+        if (activatedCardCount >= maxActiveCards)
+            return;
 
-        // Crear personaje.
-        GameObject character = Instantiate(prefab, card.transform.position, Quaternion.identity);
+        activatedCardCount++;
 
-        // Eliminar castas usadas
+        GameObject prefab = card.characterPrefabs[
+            Random.Range(0, card.characterPrefabs.Length)
+        ];
+
+        GameObject character = Instantiate(
+            prefab, card.transform.position, Quaternion.identity
+        );
+
         spawnedCharacters.Add(character);
         activeCards.Remove(card);
         Destroy(card.gameObject);
     }
 
-    // Elimina todas las cartas activas.
+    // Elimina todas las cartas activas
     public void ClearCards()
     {
         foreach (CharacterCard card in activeCards)
         {
             if (card != null)
-            {
                 Destroy(card.gameObject);
-            }
         }
         activeCards.Clear();
     }
 
-    // Elimina personajes que no se encuentran dentro de la zona de combate
+    // Elimina personajes que no están dentro de la zona de combate
     public void CleanOutsideBattleZone()
     {
         foreach (GameObject character in spawnedCharacters)
         {
             if (character == null)
-            {
                 continue;
-            }
 
             PlayerTag tag = character.GetComponent<PlayerTag>();
 
             if (tag == null || !tag.isInsideBattleZone)
-            {
                 Destroy(character);
-            }
         }
         spawnedCharacters.RemoveAll(c => c == null);
     }
 
-    // Genera una nueva tanda de cartas
+    // Genera una nueva tanda de cartas y reinicia el contador
     public void GenerateNewCards()
     {
         ClearCards();
 
-        float startX = -(cols - 1) * spacing / (-1.55f);
+        // Reiniciar contador para la nueva ronda
+        activatedCardCount = 0;
 
-        // Creación dinámica de las cartas
-        for (int col = 0; col < cols; col++)
-        {
-            float posX = startX + col * spacing;
-            float posY = 100f;
-
-            Vector3 spawnPos = new Vector3(posX, posY, 0);
-            GameObject cardObj = Instantiate( cardPrefab, spawnPos, Quaternion.identity);
-            CharacterCard card = cardObj.GetComponent<CharacterCard>();
-
-            card.characterPrefabs = characterPrefabs;
-            card.Init(this);
-            activeCards.Add(card);
-        }
+        SpawnCards();
     }
 }

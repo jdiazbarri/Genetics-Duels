@@ -5,7 +5,7 @@ using UnityEngine;
 // Gestiona el comportamiento de los proyectilesdisparados por personajes a distancia.
 //
 // El proyectil almacena una copia de las estadísticas necesarias del atacante para evitar depender de él una vez lanzado.
-public class ArrowProjectile : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
     // =========================
     // Configuración proyectil

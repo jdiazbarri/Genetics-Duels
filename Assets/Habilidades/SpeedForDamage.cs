@@ -74,7 +74,7 @@ public class SpeedForDamage : MonoBehaviour, Skills
  
         SkillInfo skill = new SkillInfo();
 
-        skill.skillName = "Vel.ataque por daño  (" + "-" + ((1f - damageMultiplier) * 100f) + "% daño, +" + ((attackSpeedMultiplier - 1f) * 100f) + "% vel. Ataque) " + "-" + " " + "T" + tier;
+        skill.skillName = "Vel.ataque por daño (" + "-" + ((1f - damageMultiplier) * 100f) + "% daño, +" + ((attackSpeedMultiplier - 1f) * 100f) + "% vel. Ataque) " + "-" + " " + "T" + tier;
 
         skill.description = "-" + ((1f - damageMultiplier) * 100f) +"% daño, +" + ((attackSpeedMultiplier - 1f) * 100f) +"% vel. Ataque";
 

@@ -69,7 +69,7 @@ public class LifeForDefence : MonoBehaviour, Skills
 
         SkillInfo skill = new SkillInfo();
 
-        skill.skillName = "Vida por defensa (" + "-" + ((1f - defenseMultiplier) * 100f) + "% defensa) " + "-"+ " " + "T" + tier;
+        skill.skillName = "Vida por defensa (" + "-" + ((healthMultiplier - 1f) * 100f) + "% defensa) " + "-"+ " " + "T" + tier;
 
         skill.description = "-" + ((1f - defenseMultiplier) * 100f) + "% defensa, +" + ((healthMultiplier - 1f) * 100f) + "% vida";
 

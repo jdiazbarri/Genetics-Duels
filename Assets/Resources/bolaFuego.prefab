@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8900177923476924270}
   - component: {fileID: 1045360221680952063}
   m_Layer: 0
-  m_Name: bolaFuego
+  m_Name: BolaFuego
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

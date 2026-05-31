@@ -43,17 +43,21 @@ public class MenuPausa : MonoBehaviour
 
         instructionsText.text =
 
-            "- Arrastra personajes al tablero\n\n" +
+            "- Arrastra personajes dentro de las murallas para activar el botón de batalla\n\n" +
 
-            "- Fusiona aliados usando monedas\n\n" +
+            "- Para fusionar aliados, colado un personaje dentro del primer recuadro\n\n" +
 
-            "- Gana batallas para obtener fichas\n\n" +
+            "  y otro en el segundo y se genera un nuevo personaje\n\n" +
 
-            "- Los hijos heredan estadísticas y habilidades\n\n" +
+            "- Las fusiones consumen monedas de fusión que se obtienen al subir de ronda\n\n" +
 
-            "- La misma sangre activa Endogamia\n\n" +
+            "- Los hijos heredan estadísticas y habilidades de los padres\n\n" +
 
-            "- Usa el botón pausa para detener la partida";
+            "- Dos personajes con el mismo tipo de sangre activan la habildiad especial endogamia\n\n" +
+
+            "- El botón de volver, permite volver al menú principal sin reiniciar la partida\n\n" +
+            
+            "- El sistema decide que personajes usar si se seleccionan más del límite";
     }
 
     // Pausar partida y mostrar menú
