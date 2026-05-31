@@ -10,5 +10,5 @@ Versión final del juego
 5. Ir a la carpeta de escenas y abrir menú pricipal, así apareceran todos los elementos de la jerarquia.
 6. Proyecto instalado.
 
-# Enlace directo al ejecutable Gold Master 
+# Enlace directo al ejecutable Gold Master desde Drive
 https://drive.google.com/file/d/17lFSTew2MghgkFrtswj6LTg7q97JrkRa/view?usp=sharing
