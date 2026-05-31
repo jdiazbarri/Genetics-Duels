@@ -3,7 +3,7 @@
 Versión final del juego
 
 # Instruciones para descargar el proyecto
-1. Darle al botón de Code para descargar el zip.
+1. Darle al botón de Code para descargar el zip o decargar Source Code desde realase.
 2. Descomprimirlo.
 3. Abrir un unity (⚠️ Importante debe ser la misma versión usada para el desarollo del proyecto, ya que si se habre con otra versión unity puede modificar elementos como texto y botones, provocando que el resultado no se ha el esperado⚠️) ⚠️Unity 2022.3.11f1⚠️.
 4. Hacer click en el botón ADD de Unity, seleccionar añadir proyecto desde el disco, y seleccionar la carpeta descromida.
